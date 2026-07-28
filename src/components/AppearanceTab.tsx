@@ -13,7 +13,7 @@ import {
   type PalettePreset,
   type StoredPalette,
 } from "@/lib/palette";
-import { downloadTextFile } from "@/admin/lib/download";
+import { downloadTextFile } from "@/lib/download";
 import { PalettePreview } from "./PalettePreview";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 

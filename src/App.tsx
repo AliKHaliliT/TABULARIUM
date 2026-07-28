@@ -1,6 +1,6 @@
 import { LazyMotion, MotionConfig, domAnimation } from "framer-motion";
 import { ContentProvider } from "@/context/ContentContext";
-import { Admin } from "@/admin/pages/Admin";
+import { Admin } from "@/pages/Admin";
 
 /**
  * TABULARIUM is one page: the admin panel. The shell provides the motion

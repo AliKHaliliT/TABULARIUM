@@ -8,7 +8,7 @@ import {
   toSeedFileJson,
   type SiteIdentity,
 } from "@/lib/site";
-import { downloadTextFile } from "@/admin/lib/download";
+import { downloadTextFile } from "@/lib/download";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { PAGE_COPY } from "@/lib/pageCopy";
 

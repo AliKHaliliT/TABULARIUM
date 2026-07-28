@@ -1,6 +1,6 @@
 import { FileDown, Package } from "lucide-react";
 import { buildPortfolioSnapshot, toPortfolioFileJson } from "@/services/portfolioSnapshot";
-import { downloadTextFile } from "@/admin/lib/download";
+import { downloadTextFile } from "@/lib/download";
 
 /**
  * Portfolio export: downloads portfolio.json, the complete snapshot of the

@@ -15,7 +15,7 @@
 ## The shape of the app
 
 One page. `src/App.tsx` provides the motion runtime, the `ContentProvider`, and the
-reading rail; `src/admin/pages/Admin.tsx` is the whole product: a grouped tab bar (System,
+reading rail; `src/pages/Admin.tsx` is the whole product: a grouped tab bar (System,
 Career, Writing, Life), per-type content tables with create, edit, and delete, and the
 special-cased Site, Profile, Skills, and Appearance tabs. There is no router and no server.
 
