@@ -1,0 +1,13 @@
+{
+  "name": "VITA",
+  "title": "Wren Emberquill · VITA",
+  "description": "A demo deployment of VITA, the personal operating system, kept by a fictional artificer: portfolio, digital garden, travel atlas, and life ledger in one static site.",
+  "author": "Wren Emberquill",
+  "url": "",
+  "mark": "",
+  "tagline": "Logged from Cinderfen,\nfiled across the realms.",
+  "colophon": "",
+  "pageCopy": {
+    "projects": "This description is a pageCopy override from site.json; every page header can be reworded this way, and empty entries fall back to the template default."
+  }
+}
