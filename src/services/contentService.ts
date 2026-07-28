@@ -58,42 +58,11 @@ export const ContentService = {
   },
 
   downloadMarkdown: (source: AnyContentItem) => {
-    const item = source as unknown as Record<string, unknown>;
-    let fileContent = "---\n";
-    Object.keys(item).forEach((key) => {
-      if (
-        key !== "body" &&
-        key !== "id" &&
-        key !== "type" &&
-        item[key] !== undefined &&
-        item[key] !== ""
-      ) {
-        const value = item[key];
-        if (Array.isArray(value)) {
-          fileContent += `${key}:\n`;
-          value.forEach((v) => (fileContent += `  - ${v}\n`));
-        } else {
-          const safeValue =
-            typeof value === "string" && value.includes(":")
-              ? `"${value}"`
-              : value;
-          fileContent += `${key}: ${safeValue}\n`;
-        }
-      }
-    });
-    fileContent += "---\n\n";
-    fileContent += item.body || "";
-
+    const fileContent = toMarkdownFile(source);
     const blob = new Blob([fileContent], { type: "text/markdown" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
-
-    const filename = String(item.title || item.city || item.name || "untitled")
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/(^-|-$)+/g, "");
-
-    link.download = `${filename}.md`;
+    link.download = markdownFileName(source);
     link.href = url;
     document.body.appendChild(link);
     link.click();
@@ -101,3 +70,54 @@ export const ContentService = {
     URL.revokeObjectURL(url);
   },
 };
+
+/** Serialize any item (or the settings object) back into the seed-file
+ *  format: frontmatter for every set field, then the body. Shared by the
+ *  per-item download, the zip bundle, and the repository push. */
+export function toMarkdownFile(source: AnyContentItem | UserSettings): string {
+  const item = source as unknown as Record<string, unknown>;
+  let fileContent = "---\n";
+  Object.keys(item).forEach((key) => {
+    if (
+      key !== "body" &&
+      key !== "id" &&
+      key !== "type" &&
+      item[key] !== undefined &&
+      item[key] !== ""
+    ) {
+      const value = item[key];
+      if (Array.isArray(value)) {
+        fileContent += `${key}:\n`;
+        value.forEach((v) => (fileContent += `  - ${v}\n`));
+      } else if (typeof value === "string" && value.includes("\n")) {
+        // Multi-line values (skills, languages, links) round-trip as YAML
+        // block scalars, matching the hand-written seed files.
+        fileContent += `${key}: |\n`;
+        value.split("\n").forEach((line) => (fileContent += `  ${line}\n`));
+      } else {
+        const safeValue =
+          typeof value === "string" && value.includes(":")
+            ? `"${value}"`
+            : value;
+        fileContent += `${key}: ${safeValue}\n`;
+      }
+    }
+  });
+  fileContent += "---\n\n";
+  fileContent += item.body || "";
+  if (!String(item.body || "").endsWith("\n")) fileContent += "\n";
+  return fileContent;
+}
+
+/** The seed filename an item serializes to (slug when it has one, else a
+ *  slugified title). */
+export function markdownFileName(source: AnyContentItem): string {
+  const item = source as unknown as Record<string, unknown>;
+  const base =
+    (typeof item.slug === "string" && item.slug) ||
+    String(item.title || item.city || item.name || "untitled")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)+/g, "");
+  return `${base || "untitled"}.md`;
+}

@@ -3,6 +3,7 @@
 // ContentService). Feeds the resume builder's import and doubles as a backup.
 
 import { ContentService } from "./contentService";
+import { loadStoredPalette, SEED_PALETTE } from "@/lib/palette";
 import {
   PORTFOLIO_CONTENT_TYPES,
   PORTFOLIO_FORMAT,
@@ -20,6 +21,8 @@ export function buildPortfolioSnapshot(exportedAt: string): PortfolioSnapshot {
     version: PORTFOLIO_VERSION,
     exportedAt,
     settings: ContentService.getSettings(),
+    // The owner's current look rides along so the importer can adopt it.
+    palette: loadStoredPalette() ?? SEED_PALETTE,
     content,
   };
 }

@@ -4,7 +4,11 @@ export function downloadTextFile(
   text: string,
   type = "application/json;charset=utf-8"
 ) {
-  const blob = new Blob([text], { type });
+  downloadBlobFile(filename, new Blob([text], { type }));
+}
+
+/** Trigger a browser download of an in-memory blob (zip bundles). */
+export function downloadBlobFile(filename: string, blob: Blob) {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
