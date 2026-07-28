@@ -11,7 +11,7 @@ import { loadStoredPalette, SEED_PALETTE, toSeedFileJson as paletteJson } from "
 import type { ZipEntry } from "@/lib/zip";
 
 /** Folder for each type inside src/content, mirroring the site repo. */
-const TYPE_DIRS: Record<PortfolioContentType, string> = {
+export const TYPE_DIRS: Record<PortfolioContentType, string> = {
   experience: "experience",
   education: "education",
   awards: "awards",

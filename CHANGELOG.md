@@ -18,3 +18,12 @@ Changelog; the Unreleased section is the staging area until the first version is
   versioned) that feeds the resume builder.
 - The fantasy demo record as the bundled seed, mirroring the VITA site.
 - The house documentation system and repository baseline.
+- A GitHub repository connection: git as the backend, straight from the browser. Connect
+  validates the target is a real VITA, fetch and push run a per-file three-way merge, and
+  files changed on both sides come back as conflicts resolved one by one; pushes are
+  atomic commits that never force.
+- The house theme switch, and the owner's palette riding inside the portfolio export so
+  the sister apps adopt the chosen look.
+- A content bundle download: the whole record serialized to seed files in the site repo's
+  src/content layout, zipped by a small dependency-free writer, for editing without a
+  connected repository.
