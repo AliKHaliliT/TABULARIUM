@@ -168,11 +168,11 @@ export const RepoSyncCard = () => {
           </h2>
         </div>
         <p className="m-0 text-sm text-[var(--color-text-secondary)]">
-          Connect the panel to your VITA site repository and git becomes the backend: fetch
-          pulls the seed files into this record, push commits your edits back, and files
-          changed on both sides come back as conflicts you resolve one by one. The
+          Connect the panel to your VITA site repository and git becomes the backend.
+          Fetch pulls the seed files into this record, push commits your edits back, and
+          files changed on both sides come back as conflicts you resolve one by one. The
           connection needs a fine-grained personal access token with read and write on
-          Contents for that one repository; it is stored only in this browser.
+          Contents for that one repository, and it never leaves this browser.
         </p>
       </div>
 

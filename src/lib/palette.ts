@@ -206,3 +206,28 @@ export function bootPalette(): void {
   const stored = loadStoredPalette();
   if (stored) applyPalette(stored);
 }
+
+// ── Saved custom profiles ────────────────────────────────────────────────
+// The live palette (os_palette) is one thing; owners can also keep a shelf
+// of named custom palettes and switch between them like presets.
+
+export interface CustomPalette extends StoredPalette {
+  id: string;
+  name: string;
+}
+
+const CUSTOMS_KEY = "os_palette_customs";
+
+export function loadCustomPalettes(): CustomPalette[] {
+  try {
+    const raw = localStorage.getItem(CUSTOMS_KEY);
+    const list: unknown = raw ? JSON.parse(raw) : [];
+    return Array.isArray(list) ? (list as CustomPalette[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+export function saveCustomPalettes(list: CustomPalette[]): void {
+  safeSetItem(CUSTOMS_KEY, JSON.stringify(list));
+}

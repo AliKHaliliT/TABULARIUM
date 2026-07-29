@@ -14,7 +14,7 @@ import { AnyContentItem, ContentType } from "@/types/content";
 
 // AdminTab maps 1:1 to ContentType except "settings" and "appearance",
 // which are handled separately (settings = single object; appearance =
-// palette editor). The resume builder is its own app at /resume.
+// palette editor). The resume builder is the sister app EPITOMA.
 const TAB_TO_CONTENT_TYPE: Record<
   Exclude<AdminTab, "settings" | "profile" | "skills" | "appearance">,
   ContentType
@@ -180,7 +180,7 @@ export const Admin = () => {
           </h1>
         </div>
         <p className="text-[var(--color-text-secondary)] ml-12">
-          Manage all your content
+          Every ledger of the record, in one panel
         </p>
       </div>
 

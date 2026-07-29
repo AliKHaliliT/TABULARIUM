@@ -1,14 +1,17 @@
 import { useState } from "react";
-import { Check, RotateCcw, Paintbrush, FileDown } from "lucide-react";
+import { Check, RotateCcw, Paintbrush, FileDown, Save, X } from "lucide-react";
 import {
   PALETTE_PRESETS,
   SEED_PALETTE,
   TOKEN_GUIDE,
   applyPalette,
   clearStoredPalette,
+  loadCustomPalettes,
   loadStoredPalette,
+  saveCustomPalettes,
   saveStoredPalette,
   toSeedFileJson,
+  type CustomPalette,
   type PaletteMode,
   type PalettePreset,
   type StoredPalette,
@@ -46,11 +49,39 @@ export const AppearanceTab = () => {
   const [palette, setPalette] = useState<StoredPalette>(defaultState);
   // Hex fields keep whatever the user is typing; invalid text just doesn't apply.
   const [hexDrafts, setHexDrafts] = useState<Record<string, string>>({});
+  const [customs, setCustoms] = useState<CustomPalette[]>(loadCustomPalettes);
+  const [profileName, setProfileName] = useState("");
 
   const commit = (next: StoredPalette) => {
     setPalette(next);
     applyPalette(next);
     saveStoredPalette(next);
+  };
+
+  const saveAsProfile = () => {
+    const name = profileName.trim();
+    if (!name) return;
+    const profile: CustomPalette = {
+      id: `custom-${Date.now()}`,
+      name,
+      basedOn: "",
+      light: { ...palette.light },
+      dark: { ...palette.dark },
+    };
+    profile.basedOn = profile.id;
+    const next = [...customs, profile];
+    setCustoms(next);
+    saveCustomPalettes(next);
+    setProfileName("");
+    commit({ basedOn: profile.id, light: profile.light, dark: profile.dark });
+  };
+
+  const deleteProfile = (id: string) => {
+    const next = customs.filter((c) => c.id !== id);
+    setCustoms(next);
+    saveCustomPalettes(next);
+    // The colors stay live; the palette just stops pointing at a shelf slot.
+    if (palette.basedOn === id) commit({ ...palette, basedOn: "custom" });
   };
 
   const setToken = (mode: "light" | "dark", key: keyof PaletteMode, value: string) => {
@@ -88,12 +119,12 @@ export const AppearanceTab = () => {
           <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">Palette</h2>
         </div>
         <p className="mb-5 text-sm text-[var(--color-text-secondary)]">
-          Presets swap every color token at once: the change applies live to the whole
-          site (this admin included) and is saved to <strong>this browser</strong>.
-          Editing any single color below turns the palette into a custom one. To change
-          what <strong>visitors</strong> see, export the palette file below and commit
-          it: the deployed default is <code className="font-mono text-xs">src/content/settings/palette.json</code>,
-          baked in at build time like any other content file.
+          Presets swap every color token at once. The change applies live to this panel,
+          saves to this browser, and rides in the portfolio export so the resume builder
+          matches. Editing any single color below forks the palette into a custom one,
+          which you can keep on the shelf as a named profile. What{" "}
+          <strong>visitors</strong> see only changes when the palette reaches the site
+          repo, either through a push or by committing the downloaded file.
         </p>
         <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
           {PALETTE_PRESETS.map((p) => {
@@ -129,6 +160,53 @@ export const AppearanceTab = () => {
               </button>
             );
           })}
+          {customs.map((c) => {
+            const active = activePresetId === c.id;
+            return (
+              <div
+                key={c.id}
+                role="button"
+                tabIndex={0}
+                onClick={() => commit({ basedOn: c.id, light: { ...c.light }, dark: { ...c.dark } })}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ")
+                    commit({ basedOn: c.id, light: { ...c.light }, dark: { ...c.dark } });
+                }}
+                className={`cursor-pointer rounded-card border p-4 text-left transition-colors ${
+                  active
+                    ? "border-signal ring-1 ring-signal/40"
+                    : "border-[var(--color-border)] hover:border-[var(--color-border-strong)]"
+                }`}
+              >
+                <div className="mb-2 flex items-center justify-between gap-2">
+                  <span className="min-w-0 truncate font-medium text-[var(--color-text-primary)]">
+                    {c.name}
+                  </span>
+                  <span className="flex shrink-0 items-center gap-1.5">
+                    {active && <Check size={15} className="text-signal" />}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        deleteProfile(c.id);
+                      }}
+                      className="p-0.5 text-[var(--color-text-secondary)] hover:text-red-500"
+                      aria-label={`Delete the ${c.name} profile`}
+                      title="Delete this profile"
+                    >
+                      <X size={13} />
+                    </button>
+                  </span>
+                </div>
+                <div className="mb-2.5 flex items-center gap-2">
+                  <Strip m={c.light} />
+                  <Strip m={c.dark} />
+                </div>
+                <p className="m-0 text-xs leading-relaxed text-[var(--color-text-secondary)]">
+                  Saved custom profile.
+                </p>
+              </div>
+            );
+          })}
           {activePresetId === "custom" && (
             <div className="rounded-card border border-dashed border-signal/60 p-4">
               <div className="mb-2 flex items-center justify-between gap-2">
@@ -139,9 +217,28 @@ export const AppearanceTab = () => {
                 <Strip m={palette.light} />
                 <Strip m={palette.dark} />
               </div>
-              <p className="m-0 text-xs leading-relaxed text-[var(--color-text-secondary)]">
-                Your own mix: started from a preset, edited below.
+              <p className="m-0 mb-2 text-xs leading-relaxed text-[var(--color-text-secondary)]">
+                Your own mix, not on the shelf yet. Name it to keep it.
               </p>
+              <div className="flex items-center gap-1.5">
+                <input
+                  value={profileName}
+                  onChange={(e) => setProfileName(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") saveAsProfile();
+                  }}
+                  placeholder="Profile name"
+                  aria-label="Name for this custom profile"
+                  className="w-full min-w-0 rounded-lg border border-[var(--color-border)] bg-[var(--color-input-bg)] px-2 py-1.5 text-xs text-[var(--color-text-primary)] outline-none focus:border-signal"
+                />
+                <button
+                  onClick={saveAsProfile}
+                  disabled={!profileName.trim()}
+                  className="flex shrink-0 items-center gap-1 rounded-lg bg-[var(--color-text-primary)] px-2.5 py-1.5 text-xs font-medium text-[var(--color-background)] transition-opacity hover:opacity-90 disabled:opacity-40"
+                >
+                  <Save size={12} /> Save
+                </button>
+              </div>
             </div>
           )}
         </div>
@@ -240,11 +337,11 @@ export const AppearanceTab = () => {
       <section className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-2xl p-6">
         <h2 className="mb-1 text-lg font-semibold text-[var(--color-text-primary)]">Publish</h2>
         <p className="mb-4 text-sm text-[var(--color-text-secondary)]">
-          Everything above lives in this browser only. To make this palette the site's
-          deployed default, download it and replace{" "}
-          <code className="font-mono text-xs">src/content/settings/palette.json</code> in
-          the repo: the next build bakes it into the page itself (first paint included).
-          This file is exactly what the admin will push once it moves to its own repo.
+          Everything above lives in this browser until it reaches the site repo. The
+          repository connection pushes{" "}
+          <code className="font-mono text-xs">src/content/settings/palette.json</code>{" "}
+          along with your content, or download the file here and commit it by hand. Either
+          way, the next build bakes it into the page itself, first paint included.
         </p>
         <button
           onClick={exportSeedFile}

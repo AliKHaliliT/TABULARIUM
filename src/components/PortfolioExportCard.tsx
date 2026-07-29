@@ -31,9 +31,10 @@ export const PortfolioExportCard = () => {
           </h2>
         </div>
         <p className="m-0 text-sm text-[var(--color-text-secondary)]">
-          One file with your entire portfolio: profile plus every content collection,
-          including edits saved in this browser. The <strong>resume builder</strong> imports
-          it as its content source, and it doubles as a full backup of your admin edits.
+          One file with your entire portfolio, from the profile to every content
+          collection, including the edits saved in this browser. The{" "}
+          <strong>resume builder</strong> imports it as its content source, and it also
+          works as a full backup of the record.
         </p>
       </div>
       <div className="flex flex-wrap items-center gap-2">
@@ -53,11 +54,12 @@ export const PortfolioExportCard = () => {
         </button>
       </div>
       <p className="m-0 text-xs text-[var(--color-text-secondary)]">
-        The zip holds the same record as seed files (the site repo's{" "}
-        <code>src/content</code> tree) for working without a connected repository: unzip
-        over the site repo, review the diff, and commit. Anything deleted here stays on
-        disk until you delete the file there too, and hand edits made in the repo since
-        your last fetch will be overwritten by the replace, so diff before committing.
+        The zip holds the same record as seed files, laid out like the site repo's{" "}
+        <code>src/content</code> tree, for working without a connected repository. Unzip
+        it over the site repo, review the diff, and commit. A zip cannot delete files, so
+        anything you removed here must also be removed there by hand, and unzipping
+        overwrites edits made in the repo since your last download. The diff is your
+        safety net; always read it before committing.
       </p>
     </div>
   );
