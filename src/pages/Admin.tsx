@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Settings, Plus, Edit2, Trash2, Download } from "lucide-react";
+import { Plus, Edit2, Trash2, Download } from "lucide-react";
 import { AdminTabs, AdminTab } from "@/components/AdminTabs";
 import { SettingsTab } from "@/components/SettingsTab";
 import { ProfileTab } from "@/components/ProfileTab";
@@ -39,6 +39,21 @@ const TAB_TO_CONTENT_TYPE: Record<
     blog:         "blog",
     updates:      "updates",
   };
+
+/** TABULARIUM's pixel mark: VITA's 3×2 mosaic read as a records hall, with a
+ *  lintel laid across the top so the six cells become columns (matches
+ *  favicon.svg). */
+const BrandMark = () => (
+  <svg viewBox="0 0 32 32" className="h-9 w-9 text-[var(--color-text-primary)]" aria-hidden="true">
+    <rect x="2.5" y="3" width="27" height="3.75" fill="currentColor" />
+    <rect x="2.5" y="9.5" width="7.5" height="7.5" fill="currentColor" />
+    <rect x="12.25" y="9.5" width="7.5" height="7.5" fill="#ff6b2e" />
+    <rect x="22" y="9.5" width="7.5" height="7.5" fill="currentColor" />
+    <rect x="2.5" y="19" width="7.5" height="7.5" fill="currentColor" />
+    <rect x="12.25" y="19" width="7.5" height="7.5" fill="currentColor" />
+    <rect x="22" y="19" width="7.5" height="7.5" fill="#7fb5c9" />
+  </svg>
+);
 
 export const Admin = () => {
   const [activeTab, setActiveTab] = useState<AdminTab>("settings");
@@ -172,15 +187,13 @@ export const Admin = () => {
 
       <div>
         <div className="flex items-center gap-3 mb-2">
-          <div className="p-2 bg-[var(--color-background)] rounded-lg">
-            <Settings size={22} className="text-[var(--color-text-primary)]" />
-          </div>
-          <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">
-            Admin
+          <BrandMark />
+          <h1 className="text-3xl font-bold tracking-[0.06em] text-[var(--color-text-primary)]">
+            TABULARIUM
           </h1>
         </div>
         <p className="text-[var(--color-text-secondary)] ml-12">
-          Every ledger of the record, in one panel
+          The admin panel: every ledger of the record, in one place
         </p>
       </div>
 
