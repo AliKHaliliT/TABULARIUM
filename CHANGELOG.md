@@ -27,3 +27,5 @@ Changelog; the Unreleased section is the staging area until the first version is
 - A content bundle download: the whole record serialized to seed files in the site repo's
   src/content layout, zipped by a small dependency-free writer, for editing without a
   connected repository.
+- The TABULARIUM identity: the app wears its name and a pixel mark derived from VITA's
+  (the mosaic under a lintel, read as a records hall), in the header and the favicon.
