@@ -30,6 +30,18 @@ The three apps talk through files rather than imports. Content markdown and the 
 
 ---
 
+## How the panel works
+
+TABULARIUM is a CMS without a backend. It opens in the browser, seeds itself with the demo record, and stages every edit in localStorage, so editing works offline and nothing leaves the machine while you work. What you edit is not a private database format. The nineteen content types are Markdown files with YAML frontmatter, and the identity and palette are small JSON seeds, which is exactly what the site publishes.
+
+Publishing is therefore just a matter of moving files, and the panel offers three ways to do it. The lightest is downloading a single seed after editing it. The middle path is a zip of the whole record, laid out in the site repo's `src/content` structure so it can be dropped straight in. The direct path connects the panel to the repository itself with a fine-grained token that grants contents access on that one repo and is stored only in your browser.
+
+The repository connection treats git as the panel's backend. Every fetch and push runs a per-file three-way merge against the last state the panel saw, so changes made elsewhere and changes made in the panel travel past each other cleanly. A file that changed on both sides comes back as a conflict you resolve by keeping yours or taking theirs, one file at a time. Pushes are atomic commits and the panel never force-pushes, so the repository history stays honest.
+
+Because both sides speak plain files, panel edits and hand edits coexist. You can write one entry in your editor, fix another in the panel, and the merge sorts out who touched what. Once a push lands, the site's Pages workflow rebuilds on its own, and the resume builder can pull the updated record the next time it syncs.
+
+---
+
 ## Features
 
 - **Every ledger in one panel.** Grouped tabs mirror the site's map across System, Career, Writing, and Life, with create, edit, and delete for all nineteen content types, a rich-text editor, and open type fields that never gate what a record can hold.
