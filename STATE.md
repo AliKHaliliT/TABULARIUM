@@ -5,6 +5,8 @@ Current project status. Read this before starting work. Format and rules: see
 
 ## Now
 
+- The repository is public: badges, the License section, and the sister READMEs' source
+  links all resolve for visitors now (2026-08-01).
 - The docs baseline synced with the 2026-08-01 My-Styles changes, adopting the sharpened
   human-prose rule and the public-audience rule with the untracked LOCAL.md ledger
   (2026-08-01).
@@ -16,8 +18,6 @@ Current project status. Read this before starting work. Format and rules: see
 
 ## Next
 
-- Flip the repository public (owner's click); until then the badges and the sister
-  READMEs' source links 404 for visitors while the Pages demo stays live (2026-08-01).
 - Exercise the repository connection end to end against the real deployment repo with a
   fine-grained token (owner's hands: the token never leaves the browser) (2026-07-28).
 
