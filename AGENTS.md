@@ -19,7 +19,7 @@ the indexed document that covers whatever you are about to touch.
 | `npm run build` | Type-check then production build to `dist/` |
 | `npm test` | Vitest suites for the loader, exports, and identity/palette seeds |
 | `npm run lint` | ESLint |
-| `npx tsc --noEmit` | Type-check without emitting |
+| `npx tsc -b` | Type-check all projects (the root tsconfig is solution-style; a plain `tsc --noEmit` checks nothing) |
 
 Run `npm test` after touching `contentLoader`, `contentService`, or `portfolioSnapshot`:
 those suites pin parsing, sorting, localStorage fallback, and the export contract.

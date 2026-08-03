@@ -64,7 +64,7 @@ npm install
 npm run dev
 ```
 
-The panel opens on port 3100. VITA runs on 3000 and EPITOMA on 3200, so all three run side by side. Edit anything, then publish through the download buttons, the content zip, or the repository connection.
+The panel opens on port 3100. VITA runs on 3000 and EPITOMA on 3200, so all three run side by side. Edit anything, then publish through the download buttons, the content zip, or the repository connection. The hosted panel always runs the latest release; a local clone catches up with an ordinary `git pull`.
 
 Contributors and coding agents should start at [`AGENTS.md`](AGENTS.md), which is the vendor-neutral entry point and the full documentation index.
 
