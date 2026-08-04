@@ -26,7 +26,7 @@ TABULARIUM is one of three sister repositories.
 | **TABULARIUM** (this repo) | Edits every ledger and publishes the seed files | [alikhalilit.github.io/TABULARIUM](https://alikhalilit.github.io/TABULARIUM/) |
 | [**EPITOMA**](https://github.com/AliKHaliliT/EPITOMA) | Condenses the record into resumes and CVs | [alikhalilit.github.io/EPITOMA](https://alikhalilit.github.io/EPITOMA/) |
 
-The three apps talk through files rather than imports. Content markdown and the `site.json` and `palette.json` seeds flow to the site, and the `portfolio.json` snapshot flows to the resume builder. This repo carries its copy of the snapshot contract in `src/types/portfolio.ts`, versioned under the `vita-portfolio` format name.
+The three apps talk through files rather than imports. Content markdown and the `site.json` and `palette.json` seeds flow to the site, and the `portfolio.json` snapshot flows to the resume builder. This repo carries its copy of the snapshot contract in `src/features/publish/contract.ts`, versioned under the `vita-portfolio` format name.
 
 ---
 

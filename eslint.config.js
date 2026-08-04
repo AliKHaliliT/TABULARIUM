@@ -27,12 +27,4 @@ export default defineConfig([
       ],
     },
   },
-  {
-    // Context modules intentionally export a Provider + its hook as a pair;
-    // the only cost is a full-reload fallback for these files in dev HMR.
-    files: ['**/context/*.tsx'],
-    rules: {
-      'react-refresh/only-export-components': 'off',
-    },
-  },
 ])

@@ -21,8 +21,9 @@ the indexed document that covers whatever you are about to touch.
 | `npm run lint` | ESLint |
 | `npx tsc -b` | Type-check all projects (the root tsconfig is solution-style; a plain `tsc --noEmit` checks nothing) |
 
-Run `npm test` after touching `contentLoader`, `contentService`, or `portfolioSnapshot`:
-those suites pin parsing, sorting, localStorage fallback, and the export contract.
+Run `npm test` after touching the record's `seed`, `store`, or `schema`, or the publish
+`snapshot`: those suites pin parsing, sorting, localStorage fallback, the record
+contract, and the export contract.
 
 ## Hard rules
 
@@ -43,11 +44,26 @@ These are non-negotiable. Depth lives in the indexed documents; this is the chec
   (see [docs/BASELINE.md](docs/BASELINE.md)); read it when it exists, create it when first
   needed, and when unsure whether a fact is sensitive, ask the owner instead of recording
   it.
+- **The layer rule is absolute.** Imports point downward through
+  `app -> pages -> features -> entities -> shared`, never up or sideways. A slice is
+  entered only through its `index.ts` (suites excepted), and same-layer slices never
+  import each other; a concern spanning two of them moves up a layer or inverts its
+  dependencies. See
+  [decision 0004](docs/decisions/0004-build-the-panel-as-one-way-sliced-layers.md).
+- **Content is checked at the door.** Everything entering the record passes through
+  `entities/record/schema.ts`; never widen a type with a cast to make a value fit. This
+  panel writes what it reads, so an unchecked value becomes a committed file. See
+  [decision 0006](docs/decisions/0006-guard-the-record-with-hand-written-validators.md).
+- **Only `shared/api` speaks HTTP.** The GitHub client is the single network door; no
+  feature or component calls `fetch` directly.
+- **The environment is read only through `shared/config`.** No other module touches
+  `import.meta.env`.
 - **Motion runs behind `LazyMotion` strict** (`domAnimation` features): always import and
   use `m.` from framer-motion, never `motion.` (a `motion.` component throws at runtime).
-- **Colors come from CSS variables** (`--color-card`, `--color-signal`, and so on); never
-  hardcode a color. The design language is the dossier: data is square, actions are round,
-  one working accent.
+- **Colors come from the tokens** in `src/app/styles/tokens.css` (`--color-card`,
+  `--color-signal`, and so on), reached either as a token utility or as the variable;
+  never hardcode a color and never reach for a raw palette class. The design language is
+  the dossier: data is square, actions are round, one working accent.
 - **Self-containment.** This app imports only npm packages plus its own `src/`. The shared
   core (`types/content.ts`, the services, the lib modules) is this repo's own copy; sister
   repos share by copying, never by importing, and the portfolio contract's

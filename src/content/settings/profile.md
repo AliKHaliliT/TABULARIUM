@@ -20,7 +20,7 @@ scholar: ""
 medium: ""
 orcid: ""
 # Any other platform, one per line: "Label: URL" or "Label [icon]: URL".
-# The optional [icon] names a glyph from src/lib/linkIcons.ts; with an
+# The optional [icon] names a glyph from src/shared/lib/linkIcons.ts; with an
 # icon the hero renders an icon square, without one a text chip. A
 # mailto link renders as an obfuscated copy-to-clipboard chip instead.
 links: |

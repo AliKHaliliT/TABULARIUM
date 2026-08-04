@@ -6,6 +6,19 @@ Changelog; the Unreleased section is the staging area until the first version is
 
 ## Unreleased
 
+### Changed
+
+- Restructured the source tree into one-way sliced layers
+  (`app -> pages -> features -> entities -> shared`), each slice entered through its own
+  public door, with the composition root split into a bootstrap, a provider stack, and the
+  chrome. The tab type moved into the editing feature so the feature no longer depends on
+  the page that displays it, and the GitHub client became the panel's single network door.
+  Suites moved to a `tests/` tree mirroring `src/`.
+- Content is now checked as it enters the record. A bundled markdown file whose frontmatter
+  cannot produce a valid item fails with the path named, and a localStorage value that
+  breaks the contract falls back to the committed seed with the key to clear named. This
+  matters most here, because the panel writes out what it reads back.
+
 ### Added
 
 - The admin panel as a standalone app, extracted from the VITA repository: grouped tabs
