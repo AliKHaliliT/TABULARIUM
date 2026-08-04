@@ -30,9 +30,6 @@ Current project status. Read this before starting work. Format and rules: see
 
 ## Next
 
-- Restructure the README to the baseline's ten-section schema (Philosophy, Domain,
-  Pillars, Structure stems), keeping the panel's guide sections as organic content
-  (2026-08-04).
 - Exercise the repository connection end to end against the real deployment repo with a
   fine-grained token (owner's hands: the token never leaves the browser) (2026-07-28).
 

@@ -16,6 +16,22 @@ The panel is built with React and Vite as a single page with no server. Everythi
 
 ---
 
+## The Philosophy: Why Does This Exist?
+
+A content editor is where a file-based record usually goes to die. The moment editing lives in a database, the files stop being the truth and start being an export, and the whole reason for keeping plain files evaporates. The tool becomes load-bearing, and the record can no longer be read without it.
+
+TABULARIUM exists to be an editor that never takes ownership. It stages edits in the browser, and what it hands back is exactly the Markdown and JSON a person would have typed by hand. Panel edits and hand edits coexist because they produce the same bytes, and if the panel disappeared tomorrow the record would be unaffected. That is the test the design has to pass: the editor is disposable, and the files are not.
+
+---
+
+## The Domain: Why an Editor Without a Backend?
+
+Editing a record you do not host is a genuinely awkward problem, which is what makes it worth building against. There is no server to hold a draft, so the browser has to be the staging area. There is no database to enforce a schema, so the record's shape has to be checked on the way in and on the way out. And the destination is a git repository, not a table, so publishing is a merge rather than an update.
+
+That last constraint shapes the most of it. Because the same files can change in the repository while they are being edited here, a push cannot simply overwrite; it needs a per-file three-way merge against the last state the panel saw, conflicts a person resolves one file at a time, and commits that never force. A domain with a server and a single writer would have made all of that unnecessary, and would have taught nothing.
+
+---
+
 ## The ecosystem
 
 TABULARIUM is one of three sister repositories.
@@ -42,7 +58,36 @@ Because both sides speak plain files, panel edits and hand edits coexist. You ca
 
 ---
 
-## Features
+## Core Architectural Pillars
+
+1. **The files are the truth, and the panel is disposable.** Every edit is staged in localStorage and published as the same Markdown and JSON a person would write by hand. Nothing here is a private format.
+2. **Imports point downward, and a linter says so.** The source tree is five sliced layers, `app -> pages -> features -> entities -> shared`, entered only through each slice's own door. ESLint checks the direction, so an upward import fails the build rather than surviving a diff.
+3. **One network door.** Only `shared/api` speaks HTTP. No feature and no component calls `fetch`, which keeps the whole remote surface in one auditable module.
+4. **Content is checked at the door.** Everything entering the record passes its contract. This matters more here than anywhere else in the family, because this panel writes out what it reads back, so an unchecked value becomes a committed file.
+5. **Git is the backend.** Publishing is a per-file three-way merge against the last seen state, with conflicts resolved one file at a time, atomic commits, and no force-push. The token grants contents access to one repository and never leaves the browser.
+
+---
+
+## Project Structure
+
+```text
+tabularium/
+├── AGENTS.md              # Agent entry point and the single documentation index
+├── docs/                  # Technical documentation, indexed in AGENTS.md
+└── src/
+    ├── app/               # Composition root: bootstrap, providers, chrome, tokens
+    ├── pages/             # The one page, and the parts only it composes
+    ├── features/          # edit-record, edit-settings, appearance, site-identity, publish
+    ├── entities/          # record (the content model and both its doors), site (identity, palette)
+    ├── shared/            # api (the single network door), config, lib, ui, testing
+    └── content/           # The demo record this panel edits
+```
+
+The annotated map of the whole system, including the layer rule and the sync engine, lives in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+
+---
+
+## Key Features
 
 - **Every ledger in one panel.** Grouped tabs mirror the site's map across System, Career, Writing, and Life, with create, edit, and delete for all nineteen content types, a rich-text editor, and open type fields that never gate what a record can hold.
 - **Site identity and palette editors.** Both preview live, five palette presets ship with the panel, and a shelf holds the custom palettes you design and save yourself.
@@ -53,7 +98,7 @@ Because both sides speak plain files, panel edits and hand edits coexist. You ca
 
 ---
 
-## Getting started
+## Getting Started
 
 The [hosted panel](https://alikhalilit.github.io/TABULARIUM/) works as it stands. It opens seeded with the same fantasy demo record the VITA template ships, and your edits persist in your browser.
 
