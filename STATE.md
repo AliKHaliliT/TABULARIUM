@@ -5,6 +5,11 @@ Current project status. Read this before starting work. Format and rules: see
 
 ## Now
 
+- The documentation system is the client style's own: the rulebook is a byte-identical
+  copy of the Helm template's, the changelog is gone with its trigger unmet, the index
+  took the style's shape, and improvements now travel upstream through the report path
+  in AGENTS.md (2026-08-04). Decision 0009 carries the reasoning.
+
 - The source tree moved to one-way sliced layers after the client template in the style
   family, and both record doors are now checked at the boundary (2026-08-04). The
   reasoning is in decisions 0004 through 0006.
@@ -24,6 +29,9 @@ Current project status. Read this before starting work. Format and rules: see
 
 ## Next
 
+- Restructure the README to the baseline's ten-section schema (Philosophy, Domain,
+  Pillars, Structure stems), keeping the panel's guide sections as organic content
+  (2026-08-04).
 - Exercise the repository connection end to end against the real deployment repo with a
   fine-grained token (owner's hands: the token never leaves the browser) (2026-07-28).
 
