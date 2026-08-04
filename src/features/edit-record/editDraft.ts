@@ -14,6 +14,7 @@ export interface EditDraft {
 export const str = (draft: EditDraft, field: string): string =>
   (draft[field] as string | undefined) || "";
 
+/** How a form reports one field change back to the draft it is editing. */
 export type SetField = (field: string, value: string | string[] | boolean) => void;
 
 const DEFAULT_BY_TYPE: Record<string, EditDraft> = {

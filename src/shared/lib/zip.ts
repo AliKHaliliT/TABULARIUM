@@ -27,12 +27,23 @@ function dosDateTime(d: Date): { time: number; date: number } {
   };
 }
 
+/** One file destined for the archive: its path inside the zip, and its bytes. */
 export interface ZipEntry {
   /** Forward-slash path inside the archive, e.g. "src/content/blog/post.md". */
   path: string;
   content: string;
 }
 
+/**
+ * Packs entries into a zip archive with no compression and no dependency.
+ *
+ * Entries are stored rather than deflated, which keeps the writer small enough
+ * to be worth owning; seed files are text and the archive is downloaded once.
+ *
+ * @param entries - The files to pack, each with its path inside the archive.
+ *
+ * @returns The archive as a blob, ready to hand to the browser.
+ */
 export function buildZip(entries: ZipEntry[], now: Date = new Date()): Blob {
   const encoder = new TextEncoder();
   const { time, date } = dosDateTime(now);

@@ -7,6 +7,7 @@ interface TagInputProps {
   placeholder?: string;
 }
 
+/** A chip field: type to add a tag, backspace or click to remove one. */
 export const TagInput = ({
   tags,
   onChange,

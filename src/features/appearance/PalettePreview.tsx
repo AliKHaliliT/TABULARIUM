@@ -45,6 +45,7 @@ const Chip = ({
   </span>
 );
 
+/** A miniature of the site drawn in a candidate palette, before committing to it. */
 export const PalettePreview = ({ mode, label }: { mode: PaletteMode; label: string }) => {
   const { settings } = useContent();
   const site = useSiteIdentity();

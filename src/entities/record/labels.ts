@@ -20,6 +20,7 @@ export const typeLabel = (
   );
 };
 
+/** Display labels for the employment kinds an experience entry may name. */
 export const EMPLOYMENT_TYPE_LABEL: Record<string, string> = {
   "full-time": "Full-time",
   "part-time": "Part-time",
@@ -28,6 +29,7 @@ export const EMPLOYMENT_TYPE_LABEL: Record<string, string> = {
   freelance: "Freelance",
 };
 
+/** Display labels for the common award kinds. */
 export const AWARD_TYPE_LABEL: Record<string, string> = {
   award: "Award",
   scholarship: "Scholarship",
@@ -36,6 +38,7 @@ export const AWARD_TYPE_LABEL: Record<string, string> = {
   competition: "Competition",
 };
 
+/** Display labels for the common publication kinds. */
 export const PUB_TYPE_LABEL: Record<string, string> = {
   journal: "Journal",
   conference: "Conference",
@@ -47,6 +50,7 @@ export const PUB_TYPE_LABEL: Record<string, string> = {
   other: "Other",
 };
 
+/** Display labels for the common speaking kinds. */
 export const SPEAKING_TYPE_LABEL: Record<string, string> = {
   talk: "Talk",
   podcast: "Podcast",

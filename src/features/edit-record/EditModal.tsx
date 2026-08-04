@@ -40,6 +40,7 @@ const MODAL_TITLES: Record<string, string> = {
   settings:      "Settings",
 };
 
+/** The editor for one record item, showing the fields its collection defines. */
 export const EditModal = ({
   isOpen,
   onClose,

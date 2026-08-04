@@ -19,6 +19,13 @@ interface RichTextEditorProps {
   onChange: (markdown: string) => void;
 }
 
+/**
+ * A rich-text field that round-trips through Markdown.
+ *
+ * The record is stored as Markdown, so this edits HTML and converts on the way
+ * in and out. The builder's own editor keeps HTML instead, because a resume
+ * needs alignment and underline that Markdown cannot express.
+ */
 export const RichTextEditor = ({ value, onChange }: RichTextEditorProps) => {
   // Quill's HTML is the working state; the markdown `value` prop reseeds it
   // only when it changes from the outside. Tracking the markdown we last

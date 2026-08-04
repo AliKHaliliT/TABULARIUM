@@ -4,6 +4,7 @@
 import { useEffect } from "react";
 import { m, AnimatePresence } from "framer-motion";
 
+/** A modal that makes a destructive or irreversible action explicit. */
 export const ConfirmDialog = ({
   open,
   title = "Are you sure?",

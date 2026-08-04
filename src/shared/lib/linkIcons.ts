@@ -5,6 +5,7 @@
 
 import { type LucideIcon, AtSign, Award, BarChart3, BookOpen, Bot, Brain, Briefcase, Camera, Clapperboard, Codepen, Cpu, Database, Dribbble, Dumbbell, Facebook, FileText, Gamepad2, Github, Gitlab, Globe, GraduationCap, Heart, Instagram, Link2, Mail, MapPin, MessageCircle, Mic, Music, PenLine, Phone, Rss, Send, Sparkles, Twitch, Twitter, Youtube } from "lucide-react";
 
+/** The glyphs a profile link may wear, keyed by the name a settings file stores. */
 export const LINK_ICONS: Record<string, LucideIcon> = {
   at: AtSign,
   award: Award,
@@ -45,4 +46,5 @@ export const LINK_ICONS: Record<string, LucideIcon> = {
   youtube: Youtube,
 };
 
+/** Every icon name a link may name, for the editor's picker. */
 export const LINK_ICON_NAMES = Object.keys(LINK_ICONS).sort();

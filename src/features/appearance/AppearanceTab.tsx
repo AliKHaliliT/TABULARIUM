@@ -45,6 +45,7 @@ const Strip = ({ m }: { m: PaletteMode }) => (
   </span>
 );
 
+/** The Appearance tab: pick or build a palette, preview it, and export the seed. */
 export const AppearanceTab = () => {
   const [palette, setPalette] = useState<StoredPalette>(defaultState);
   // Hex fields keep whatever the user is typing; invalid text just doesn't apply.

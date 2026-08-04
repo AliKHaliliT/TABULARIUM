@@ -137,6 +137,21 @@ const SORT_SPECS: Partial<
   courses: { field: "date", kind: "date" },
 };
 
+/**
+ * Reads one collection out of the bundled markdown.
+ *
+ * Items are ordered before they are returned, so no caller ever sees them in
+ * the arbitrary order the glob produced: dated collections read newest first
+ * with an alphabetical tie-break, and the rest read alphabetically.
+ *
+ * @param type - The collection to load.
+ *
+ * @returns Every item of that collection, checked and ordered. An unknown
+ *   collection yields an empty list rather than an error.
+ *
+ * @throws RecordContractError When a committed file's frontmatter cannot produce
+ *   a valid item, naming the file so the authoring bug is obvious.
+ */
 export function loadInitialData(type: ContentType): AnyContentItem[] {
   const typeFiles = files[type];
   if (!typeFiles) return [];
@@ -221,6 +236,12 @@ export function seedFingerprint(type: ContentType): string {
     .join("|");
 }
 
+/**
+ * Reads the owner profile out of the bundled markdown.
+ *
+ * @returns The profile, or a neutral placeholder when no settings file exists,
+ *   so a fresh copy of the template still renders.
+ */
 export function loadSettings(): UserSettings {
   const items = loadInitialData("settings");
   return (

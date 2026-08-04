@@ -15,8 +15,15 @@ export type { SiteIdentity } from "./meta";
 const STORAGE_KEY = "os_site";
 const CHANGE_EVENT = "os-site-changed";
 
+/** The identity committed as site.json: what ships before any override. */
 export const SEED_SITE = seedJson as SiteIdentity;
 
+/**
+ * Reads this browser's identity override.
+ *
+ * @returns The stored identity, or null when none is saved or the stored value
+ *   no longer satisfies the shape.
+ */
 export function loadStoredSite(): SiteIdentity | null {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -38,6 +45,13 @@ function notifyChange() {
   if (typeof document !== "undefined") document.dispatchEvent(new Event(CHANGE_EVENT));
 }
 
+/**
+ * Writes an identity override for this browser.
+ *
+ * @param site - The identity to store.
+ *
+ * @returns True when the write landed, false when storage refused it.
+ */
 export function saveStoredSite(site: SiteIdentity) {
   safeSetItem(STORAGE_KEY, JSON.stringify(site));
   notifyChange();

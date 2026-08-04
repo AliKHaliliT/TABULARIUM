@@ -38,6 +38,7 @@ export function hostLabel(url: string): string | null {
   }
 }
 
+/** One parsed line of the profile's free-form link list. */
 export interface ProfileLink {
   label: string;
   url: string;

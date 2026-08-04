@@ -75,6 +75,7 @@ const TAB_GROUPS = [
   },
 ] as const;
 
+/** The tab strip, grouped to mirror the order a visitor meets the site. */
 export const AdminTabs = ({ activeTab, onChange }: AdminTabsProps) => {
   return (
     <div className="space-y-2 pb-2">

@@ -11,6 +11,14 @@ import {
   type PortfolioSnapshot,
 } from "./contract";
 
+/**
+ * Gathers the whole record into one snapshot.
+ *
+ * @param nowIso - The export moment, passed in so the builder stays pure.
+ *
+ * @returns The snapshot, carrying every collection plus the profile and the
+ *   palette currently in force.
+ */
 export function buildPortfolioSnapshot(exportedAt: string): PortfolioSnapshot {
   const content: PortfolioSnapshot["content"] = {};
   for (const type of PORTFOLIO_CONTENT_TYPES) {

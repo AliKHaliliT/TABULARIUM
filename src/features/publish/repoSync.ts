@@ -24,6 +24,7 @@ const CONFIG_KEY = "os_repo_config";
 const STATE_KEY = "os_repo_state";
 const CONTENT_PREFIX = "src/content/";
 
+/** What the last fetch or push saw, which is the base of the next three-way merge. */
 export interface RepoState {
   headSha: string;
   /** path → blob sha at the last fetch/push: the merge base. */
@@ -31,14 +32,17 @@ export interface RepoState {
   fetchedAt: string;
 }
 
+/** One file both sides changed since the recorded base. */
 export interface Conflict {
   path: string;
   /** How the two sides diverged; "edit" is the plain both-changed case. */
   kind: "edit" | "local-delete" | "remote-delete";
 }
 
+/** How a conflict is settled: keep what is here, or take what the branch has. */
 export type Resolution = "mine" | "theirs";
 
+/** What a sync would do: the silent changes, and the conflicts needing a choice. */
 export interface SyncPlan {
   head: { commitSha: string; treeSha: string };
   remote: Record<string, string>;
@@ -54,6 +58,12 @@ export interface SyncPlan {
 
 // --- config + state ---------------------------------------------------------
 
+/**
+ * Reads the stored repository connection, token included.
+ *
+ * @returns The connection, or null when none is saved. The token lives only in
+ *   this browser and never leaves it except as a request header.
+ */
 export function loadRepoConfig(): RepoConfig | null {
   try {
     const raw = localStorage.getItem(CONFIG_KEY);
@@ -65,15 +75,33 @@ export function loadRepoConfig(): RepoConfig | null {
   }
 }
 
+/**
+ * Stores a repository connection for this browser.
+ *
+ * @param config - The repository coordinates and the token to authorize with.
+ *
+ * @returns Nothing.
+ */
 export function saveRepoConfig(cfg: RepoConfig): void {
   safeSetItem(CONFIG_KEY, JSON.stringify(cfg));
 }
 
+/**
+ * Forgets the repository connection and everything remembered about its state.
+ *
+ * @returns Nothing.
+ */
 export function clearRepoConnection(): void {
   localStorage.removeItem(CONFIG_KEY);
   localStorage.removeItem(STATE_KEY);
 }
 
+/**
+ * Reads the recorded base state of the connected repository.
+ *
+ * @returns The last seen state, or null before any fetch or push, which is what
+ *   makes the first sync a direction the owner has to choose.
+ */
 export function loadRepoState(): RepoState | null {
   try {
     const raw = localStorage.getItem(STATE_KEY);
@@ -257,6 +285,7 @@ async function applyRemotePaths(cfg: RepoConfig, plan: SyncPlan, paths: string[]
 
 // --- public operations ---------------------------------------------------------
 
+/** What a completed sync actually did. */
 export interface SyncResult {
   applied: number;
   pushedSha?: string;

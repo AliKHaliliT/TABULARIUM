@@ -34,7 +34,25 @@ function warnIfSeedChanged(type: ContentType) {
   }
 }
 
+/**
+ * The record's store: bundled markdown, optionally shadowed by this browser.
+ *
+ * @example
+ * ```ts
+ * const books = ContentService.getAll("books")
+ * ContentService.save("books", [...books, added])
+ * ```
+ */
 export const ContentService = {
+  /**
+   * Reads one collection, preferring this browser's override.
+   *
+   * @param type - The collection to read.
+   *
+   * @returns The stored items when an override exists and satisfies the
+   *   contract, otherwise the committed seed. A broken override is reported with
+   *   the key to clear and does not reach the caller.
+   */
   getAll: (type: ContentType): AnyContentItem[] => {
     try {
       const key = `${STORAGE_PREFIX}${type}`;
@@ -49,6 +67,12 @@ export const ContentService = {
     return loadInitialData(type);
   },
 
+  /**
+   * Reads the owner profile, preferring this browser's override.
+   *
+   * @returns The stored profile when it satisfies the contract, otherwise the
+   *   committed seed.
+   */
   getSettings: (): UserSettings => {
     try {
       const stored = localStorage.getItem(SETTINGS_KEY);
@@ -61,15 +85,43 @@ export const ContentService = {
     return loadSettings();
   },
 
+  /**
+   * Writes one collection, recording the seed fingerprint alongside it.
+   *
+   * The fingerprint is what later lets a redeploy that changed the markdown
+   * under a shadowed collection be noticed at all.
+   *
+   * @param type - The collection being written.
+   * @param data - Every item of that collection.
+   *
+   * @returns Nothing.
+   */
   save: (type: ContentType, data: AnyContentItem[]) => {
     safeSetItem(`${STORAGE_PREFIX}${type}`, JSON.stringify(data));
     safeSetItem(`${SEED_PREFIX}${type}`, seedFingerprint(type));
   },
 
+  /**
+   * Writes the owner profile for this browser.
+   *
+   * @param data - The profile to store.
+   *
+   * @returns Nothing.
+   */
   saveSettings: (data: UserSettings) => {
     safeSetItem(SETTINGS_KEY, JSON.stringify(data));
   },
 
+  /**
+   * Hands one item to the browser as the markdown file the site expects.
+   *
+   * This is how an edit made here reaches the site: download the file, commit it
+   * under `src/content/`, and rebuild.
+   *
+   * @param source - The item to serialize.
+   *
+   * @returns Nothing.
+   */
   downloadMarkdown: (source: AnyContentItem) => {
     const fileContent = toMarkdownFile(source);
     const blob = new Blob([fileContent], { type: "text/markdown" });

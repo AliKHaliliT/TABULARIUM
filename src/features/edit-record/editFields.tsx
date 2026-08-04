@@ -16,6 +16,7 @@ export const Row = ({ children }: { children: ReactNode }) => (
   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">{children}</div>
 );
 
+/** A labelled single-line input. */
 export const Field = ({
   label,
   value,
@@ -59,6 +60,7 @@ export const Field = ({
   </div>
 );
 
+/** A labelled dropdown over a fixed set of values. */
 export const SelectField = ({
   label,
   value,
@@ -133,6 +135,7 @@ export const SuggestField = ({
   );
 };
 
+/** A labelled multi-line input for plain text. */
 export const TextAreaField = ({
   label,
   value,
@@ -155,6 +158,7 @@ export const TextAreaField = ({
   </div>
 );
 
+/** A labelled chip field for an item's tags. */
 export const TagsField = ({
   tags,
   onChange,
@@ -168,6 +172,7 @@ export const TagsField = ({
   </div>
 );
 
+/** The rich-text field for an item's body, stored as Markdown. */
 export const RichBodyField = ({
   label,
   value,

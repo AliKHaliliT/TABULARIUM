@@ -5,6 +5,7 @@
 
 import { useSiteIdentity } from "./identity";
 
+/** The default one-line description under each page's title, keyed per page. */
 export const PAGE_COPY: Record<string, { label: string; fallback: string }> = {
   experience: { label: "Experience", fallback: "Where I've worked and what I shipped." },
   education: { label: "Education", fallback: "Degrees, certifications, and continued learning." },

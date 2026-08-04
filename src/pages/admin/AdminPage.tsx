@@ -52,6 +52,7 @@ const BrandMark = () => (
   </svg>
 );
 
+/** The panel: a tab strip over the record's ledgers and the settings surfaces. */
 export const Admin = () => {
   const [activeTab, setActiveTab] = useState<AdminTab>("settings");
   const [isModalOpen, setIsModalOpen] = useState(false);

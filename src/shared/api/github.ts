@@ -3,6 +3,7 @@
 // (Contents read/write on the one site repo); there is no server in between,
 // and the token never leaves this machine's localStorage.
 
+/** Which repository to talk to, and the token that authorizes it. */
 export interface RepoConfig {
   owner: string;
   repo: string;
@@ -10,11 +11,13 @@ export interface RepoConfig {
   token: string;
 }
 
+/** One file as the remote reports it: its path and its blob hash. */
 export interface RemoteFile {
   path: string;
   sha: string;
 }
 
+/** Where a branch currently points, which is the base every sync plan needs. */
 export interface RemoteHead {
   commitSha: string;
   treeSha: string;
@@ -49,6 +52,16 @@ async function api<T>(cfg: RepoConfig, path: string, init?: RequestInit): Promis
   return res.json() as Promise<T>;
 }
 
+/**
+ * Reads where a branch currently points.
+ *
+ * @param config - The repository and the token to authorize with.
+ *
+ * @returns The branch head, which every sync plan uses as its "theirs" side.
+ *
+ * @throws Error When the request fails or the branch does not exist, carrying
+ *   the status so a bad token reads differently from a bad branch name.
+ */
 export async function getHead(cfg: RepoConfig): Promise<RemoteHead> {
   const branch = await api<{ commit: { sha: string; commit: { tree: { sha: string } } } }>(
     cfg,
@@ -75,6 +88,16 @@ export async function getTreeFiles(
     .map((t) => ({ path: t.path, sha: t.sha }));
 }
 
+/**
+ * Reads one blob's contents.
+ *
+ * @param config - The repository and the token to authorize with.
+ * @param sha - The blob hash to read.
+ *
+ * @returns The decoded text.
+ *
+ * @throws Error When the request fails, carrying the status.
+ */
 export async function getBlobText(cfg: RepoConfig, sha: string): Promise<string> {
   const blob = await api<{ content: string; encoding: string }>(
     cfg,

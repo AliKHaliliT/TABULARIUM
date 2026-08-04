@@ -1,3 +1,10 @@
+/**
+ * Every collection the record holds.
+ *
+ * The value doubles as the content folder name and the localStorage key suffix,
+ * which is what lets one generic loader and one generic store serve them all.
+ * `settings` is the odd one out: a single object rather than a list.
+ */
 export type ContentType =
   | "projects"
   | "posts"
@@ -19,6 +26,7 @@ export type ContentType =
   | "organizations"
   | "settings";
 
+/** What every item carries, whatever collection it belongs to. */
 export interface BaseContent {
   id: string | number;
   type: ContentType;
@@ -29,6 +37,7 @@ export interface BaseContent {
   story?: string; // route of the long-form piece about this item (/blog/... or /garden/...)
 }
 
+/** A piece of work, with the year and role that place it. */
 export interface Project extends BaseContent {
   type: "projects";
   title: string;
@@ -44,6 +53,7 @@ export interface Project extends BaseContent {
   featured?: boolean;
 }
 
+/** A book, with where the reading of it currently stands. */
 export interface Book extends BaseContent {
   type: "books";
   title: string;
@@ -54,6 +64,7 @@ export interface Book extends BaseContent {
   notes?: string;
 }
 
+/** A city visited, joined to its country by an exact name match. */
 export interface Trip extends BaseContent {
   type: "trips";
   city: string;
@@ -65,6 +76,7 @@ export interface Trip extends BaseContent {
   description?: string;
 }
 
+/** A country, which renders whether or not any city entry points at it. */
 export interface Country extends BaseContent {
   type: "countries";
   name: string;
@@ -75,6 +87,7 @@ export interface Country extends BaseContent {
   visited?: boolean;
 }
 
+/** A garden note: an atomic, still-growing piece of knowledge. */
 export interface Post extends BaseContent {
   type: "posts";
   title: string;
@@ -83,6 +96,7 @@ export interface Post extends BaseContent {
   postType?: string; // common: Seedling | Evergreen | List; any label is valid
 }
 
+/** A finished article, which may live canonically on another site. */
 export interface BlogPost extends BaseContent {
   type: "blog";
   title: string;
@@ -95,6 +109,7 @@ export interface BlogPost extends BaseContent {
   externalUrl?: string; // canonical home elsewhere (Medium, dev.to, ...): the site links out
 }
 
+/** A short log entry: a thought, a link worth keeping, or a milestone. */
 export interface Update extends BaseContent {
   type: "updates";
   date: string;
@@ -103,6 +118,7 @@ export interface Update extends BaseContent {
   linkTitle?: string;
 }
 
+/** A course taken, distinguished from education by having a provider. */
 export interface Course extends BaseContent {
   type: "courses";
   title: string;
@@ -110,6 +126,7 @@ export interface Course extends BaseContent {
   link?: string;
 }
 
+/** A role held somewhere, the backbone of a work history. */
 export interface Experience extends BaseContent {
   type: "experience";
   title: string;
@@ -121,6 +138,7 @@ export interface Experience extends BaseContent {
   link?: string;
 }
 
+/** A degree or programme, with the institution that granted it. */
 export interface Education extends BaseContent {
   type: "education";
   title: string;
@@ -134,6 +152,7 @@ export interface Education extends BaseContent {
   link?: string;
 }
 
+/** An award, scholarship, grant, or competition placing. */
 export interface Award extends BaseContent {
   type: "awards";
   title: string;
@@ -143,6 +162,7 @@ export interface Award extends BaseContent {
   link?: string;
 }
 
+/** A published work, carrying the venue and identifiers a citation needs. */
 export interface Publication extends BaseContent {
   type: "publications";
   title: string;
@@ -154,6 +174,7 @@ export interface Publication extends BaseContent {
   pubType?: string; // common: journal | conference | preprint | book-chapter | thesis | patent | poster | other
 }
 
+/** A talk, panel, or appearance, with links to its artifacts. */
 export interface SpeakingEvent extends BaseContent {
   type: "speaking";
   title: string;
@@ -166,6 +187,7 @@ export interface SpeakingEvent extends BaseContent {
   video?: string;
 }
 
+/** Unpaid work done for an organization. */
 export interface Volunteering extends BaseContent {
   type: "volunteering";
   title: string;
@@ -177,6 +199,7 @@ export interface Volunteering extends BaseContent {
   link?: string;
 }
 
+/** A certification, with the credential id that makes it checkable. */
 export interface Certificate extends BaseContent {
   type: "certificates";
   title: string;
@@ -187,6 +210,7 @@ export interface Certificate extends BaseContent {
   certType?: string; // common: technical | professional | academic | language | other
 }
 
+/** A person willing to vouch, and how to reach them. */
 export interface Reference extends BaseContent {
   type: "references";
   name: string;
@@ -200,12 +224,14 @@ export interface Reference extends BaseContent {
   link?: string;
 }
 
+/** Something the owner does outside work. */
 export interface Interest extends BaseContent {
   type: "interests";
   title: string;
   category?: string; // common: hobby | sport | creative | technical | social | other; any label is valid
 }
 
+/** A membership, professional body, or affiliation. */
 export interface Organization extends BaseContent {
   type: "organizations";
   title: string;
@@ -217,6 +243,12 @@ export interface Organization extends BaseContent {
   memberType?: string; // common: professional | academic | community | other
 }
 
+/**
+ * The owner's profile: the one item that is a single object, not a list.
+ *
+ * Every field is owner data, which is why none of it is ever written into source
+ * and all of it arrives from a content file.
+ */
 export interface UserSettings extends BaseContent {
   type: "settings";
   name: string;
@@ -246,6 +278,7 @@ export interface UserSettings extends BaseContent {
   uses?: string;
 }
 
+/** Any item at all, which is what the generic loader and store traffic in. */
 export type AnyContentItem =
   | Project
   | Book

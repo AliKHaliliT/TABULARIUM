@@ -2,6 +2,7 @@
 // imported by both the app (src/lib/site.ts) and vite.config.ts (the
 // siteSeed plugin), so it must not pull in React or browser globals.
 
+/** The site's own name and metadata, separate from the owner's profile. */
 export interface SiteIdentity {
   /** Product/wordmark text shown in the top bar and footer colophon. */
   name: string;
@@ -25,9 +26,19 @@ export interface SiteIdentity {
   pageCopy?: Record<string, string>;
 }
 
+/** The identity fields that must be present for a value to count. */
 export const SITE_KEYS = ["name", "title", "description", "author", "url"] as const;
+/** The identity fields an older or plainer site may leave out. */
 export const SITE_OPTIONAL_KEYS = ["mark", "tagline", "colophon"] as const;
 
+/**
+ * Decides whether a value can act as the site identity.
+ *
+ * @param value - The candidate, typically straight from parsed JSON.
+ *
+ * @returns True when every required field is a string and every optional field
+ *   is either absent or the right type.
+ */
 export function isSiteIdentity(value: unknown): value is SiteIdentity {
   if (typeof value !== "object" || value === null) return false;
   const record = value as Record<string, unknown>;

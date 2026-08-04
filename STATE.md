@@ -9,7 +9,8 @@ Current project status. Read this before starting work. Format and rules: see
   copy of the Helm template's, the changelog is gone with its trigger unmet, the index
   took the style's shape, and improvements now travel upstream through the report path
   in AGENTS.md (2026-08-04). Decision 0009 carries the reasoning.
-
+- Every export carries the TSDoc convention now, at 164 of 164, with the weight per export
+  following what the convention prescribes rather than applied uniformly (2026-08-04).
 - The source tree moved to one-way sliced layers after the client template in the style
   family, and both record doors are now checked at the boundary (2026-08-04). The
   reasoning is in decisions 0004 through 0006.
@@ -40,8 +41,6 @@ Current project status. Read this before starting work. Format and rules: see
 - Consider inverting the content bundle's dependencies so it takes the site identity and
   palette as arguments; that would let the repo sync and the zip export be two features
   instead of one `publish` slice (2026-08-04).
-- Bring every export up to the doc-comment convention. The files touched by the layer move
-  carry it; the rest still carry their original informal comments (2026-08-04).
 - A diff preview inside the conflict dialog (today it names the file and the divergence
   kind; showing both versions side by side is the natural next step) (2026-07-28).
 - A house favicon of its own; the app currently reuses the shared pixel-mark (2026-07-28).
