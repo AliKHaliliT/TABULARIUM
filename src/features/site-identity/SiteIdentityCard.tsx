@@ -85,15 +85,15 @@ export const SiteIdentityCard = () => {
   };
 
   return (
-    <div className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-2xl p-6 sm:p-8 space-y-6">
+    <div className="bg-card border border-line rounded-2xl p-6 sm:p-8 space-y-6">
       <div>
         <div className="mb-1 flex items-center gap-2">
-          <Globe2 size={16} className="text-[var(--color-text-secondary)]" />
-          <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">
+          <Globe2 size={16} className="text-muted" />
+          <h2 className="text-lg font-semibold text-ink">
             Site identity
           </h2>
         </div>
-        <p className="m-0 text-sm text-[var(--color-text-secondary)]">
+        <p className="m-0 text-sm text-muted">
           The site's own name and metadata: separate from your profile. Saving applies
           to <strong>this browser</strong>; to change what visitors (and search engines)
           see, download the file below and replace{" "}
@@ -105,7 +105,7 @@ export const SiteIdentityCard = () => {
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         {FIELDS.map(({ key, label, hint, textarea }) => (
           <div key={key} className={`space-y-2 ${textarea ? "md:col-span-2" : ""}`}>
-            <label className="text-sm font-medium text-[var(--color-text-secondary)]">
+            <label className="text-sm font-medium text-muted">
               {label}
             </label>
             {textarea ? (
@@ -113,25 +113,25 @@ export const SiteIdentityCard = () => {
                 rows={3}
                 value={form[key] ?? ""}
                 onChange={(e) => handleChange(key, e.target.value)}
-                className="w-full px-3 py-2 bg-[var(--color-input-bg)] border border-[var(--color-border)] rounded-lg text-sm text-[var(--color-text-primary)] resize-none"
+                className="w-full px-3 py-2 bg-well border border-line rounded-lg text-sm text-ink resize-none"
               />
             ) : (
               <input
                 type="text"
                 value={form[key] ?? ""}
                 onChange={(e) => handleChange(key, e.target.value)}
-                className="w-full px-3 py-2 bg-[var(--color-input-bg)] border border-[var(--color-border)] rounded-lg text-sm text-[var(--color-text-primary)]"
+                className="w-full px-3 py-2 bg-well border border-line rounded-lg text-sm text-ink"
               />
             )}
-            <p className="m-0 text-xs text-[var(--color-text-secondary)]">{hint}</p>
+            <p className="m-0 text-xs text-muted">{hint}</p>
           </div>
         ))}
       </div>
 
-      <div className="space-y-4 border-t border-[var(--color-border)] pt-5">
+      <div className="space-y-4 border-t border-line pt-5">
         <div>
-          <h3 className="font-semibold text-[var(--color-text-primary)]">Page copy</h3>
-          <p className="m-0 mt-0.5 text-xs text-[var(--color-text-secondary)]">
+          <h3 className="font-semibold text-ink">Page copy</h3>
+          <p className="m-0 mt-0.5 text-xs text-muted">
             The one-line description under each page's title. Leave a field empty to keep
             the template's default wording (shown as the placeholder).
           </p>
@@ -139,7 +139,7 @@ export const SiteIdentityCard = () => {
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {Object.entries(PAGE_COPY).map(([key, { label, fallback }]) => (
             <div key={key} className="space-y-1.5">
-              <label className="text-sm font-medium text-[var(--color-text-secondary)]">
+              <label className="text-sm font-medium text-muted">
                 {label}
               </label>
               <input
@@ -147,7 +147,7 @@ export const SiteIdentityCard = () => {
                 value={form.pageCopy?.[key] ?? ""}
                 onChange={(e) => handlePageCopy(key, e.target.value)}
                 placeholder={fallback}
-                className="w-full px-3 py-2 bg-[var(--color-input-bg)] border border-[var(--color-border)] rounded-lg text-sm text-[var(--color-text-primary)]"
+                className="w-full px-3 py-2 bg-well border border-line rounded-lg text-sm text-ink"
               />
             </div>
           ))}
@@ -157,21 +157,21 @@ export const SiteIdentityCard = () => {
       <div className="flex flex-wrap items-center gap-3 pt-1">
         <button
           onClick={handleSave}
-          className="flex items-center gap-2 px-6 py-2.5 bg-[var(--color-text-primary)] text-[var(--color-background)] rounded-lg font-medium hover:opacity-90 transition-opacity"
+          className="flex items-center gap-2 px-6 py-2.5 bg-ink text-surface rounded-lg font-medium hover:opacity-90 transition-opacity"
         >
           <Save size={16} />
           Save Identity
         </button>
         <button
           onClick={() => downloadTextFile("site.json", toSiteSeedFileJson(form))}
-          className="flex items-center gap-1.5 rounded-lg border border-[var(--color-border)] px-3 py-2.5 text-sm font-medium text-[var(--color-text-secondary)] transition-colors hover:bg-[var(--color-background)] hover:text-[var(--color-text-primary)]"
+          className="flex items-center gap-1.5 rounded-lg border border-line px-3 py-2.5 text-sm font-medium text-muted transition-colors hover:bg-surface hover:text-ink"
         >
           <FileDown size={15} />
           Download site.json
         </button>
         <button
           onClick={() => setConfirmReset(true)}
-          className="flex items-center gap-1.5 rounded-lg border border-[var(--color-border)] px-3 py-2.5 text-sm font-medium text-[var(--color-text-secondary)] transition-colors hover:bg-[var(--color-background)] hover:text-[var(--color-text-primary)]"
+          className="flex items-center gap-1.5 rounded-lg border border-line px-3 py-2.5 text-sm font-medium text-muted transition-colors hover:bg-surface hover:text-ink"
         >
           <RotateCcw size={14} />
           Reset to deployed default

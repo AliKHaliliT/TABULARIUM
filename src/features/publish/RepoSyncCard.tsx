@@ -27,7 +27,7 @@ import { ConfirmDialog } from "@/shared/ui";
 type Busy = null | "connect" | "fetch" | "push" | "adopt";
 
 const inputCls =
-  "w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-input-bg)] px-3 py-2 text-sm text-[var(--color-text-primary)] outline-none focus:border-signal";
+  "w-full rounded-lg border border-line bg-well px-3 py-2 text-sm text-ink outline-none focus:border-signal";
 
 const fileLabel = (path: string) => path.replace(/^src\/content\//, "");
 
@@ -159,15 +159,15 @@ export const RepoSyncCard = () => {
     pendingPlan.plan.conflicts.every((c) => resolutions[c.path] !== undefined);
 
   return (
-    <div className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-2xl p-6 sm:p-8 space-y-4">
+    <div className="bg-card border border-line rounded-2xl p-6 sm:p-8 space-y-4">
       <div>
         <div className="mb-1 flex items-center gap-2">
-          <GitBranch size={16} className="text-[var(--color-text-secondary)]" />
-          <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">
+          <GitBranch size={16} className="text-muted" />
+          <h2 className="text-lg font-semibold text-ink">
             Repository connection
           </h2>
         </div>
-        <p className="m-0 text-sm text-[var(--color-text-secondary)]">
+        <p className="m-0 text-sm text-muted">
           Connect the panel to your VITA site repository and git becomes the backend.
           Fetch pulls the seed files into this record, push commits your edits back, and
           files changed on both sides come back as conflicts you resolve one by one. The
@@ -206,7 +206,7 @@ export const RepoSyncCard = () => {
           <button
             onClick={connect}
             disabled={busy !== null}
-            className="flex items-center justify-center gap-1.5 rounded-lg bg-[var(--color-text-primary)] px-4 py-2 text-sm font-medium text-[var(--color-background)] transition-opacity hover:opacity-90 disabled:opacity-50 sm:col-span-2"
+            className="flex items-center justify-center gap-1.5 rounded-lg bg-ink px-4 py-2 text-sm font-medium text-surface transition-opacity hover:opacity-90 disabled:opacity-50 sm:col-span-2"
           >
             {busy === "connect" ? <Loader2 size={15} className="animate-spin" /> : <Link2 size={15} />}
             Connect and validate
@@ -214,30 +214,30 @@ export const RepoSyncCard = () => {
         </div>
       ) : (
         <>
-          <div className="flex flex-wrap items-center gap-2 font-mono text-[11px] uppercase tracking-[0.08em] text-[var(--color-text-secondary)]">
-            <span className="rounded border border-[var(--color-border-strong)] px-2 py-1">
+          <div className="flex flex-wrap items-center gap-2 font-mono text-[11px] uppercase tracking-[0.08em] text-muted">
+            <span className="rounded border border-line-strong px-2 py-1">
               {cfg.owner}/{cfg.repo} · {cfg.branch}
             </span>
             <span>{hasBase ? `base: ${loadRepoState()?.fetchedAt.slice(0, 16).replace("T", " ") ?? ""}` : "no sync yet"}</span>
           </div>
 
           {!hasBase ? (
-            <div className="space-y-2 rounded-lg border border-dashed border-[var(--color-border-strong)] p-4">
-              <p className="m-0 text-sm text-[var(--color-text-secondary)]">
+            <div className="space-y-2 rounded-lg border border-dashed border-line-strong p-4">
+              <p className="m-0 text-sm text-muted">
                 First sync: pick which side is the record right now.
               </p>
               <div className="flex flex-wrap gap-2">
                 <button
                   onClick={() => setConfirmAdopt(true)}
                   disabled={busy !== null}
-                  className="flex items-center gap-1.5 rounded-lg bg-[var(--color-text-primary)] px-4 py-2 text-sm font-medium text-[var(--color-background)] transition-opacity hover:opacity-90 disabled:opacity-50"
+                  className="flex items-center gap-1.5 rounded-lg bg-ink px-4 py-2 text-sm font-medium text-surface transition-opacity hover:opacity-90 disabled:opacity-50"
                 >
                   <CloudDownload size={15} /> Use the repository (replace this record)
                 </button>
                 <button
                   onClick={doInitialPush}
                   disabled={busy !== null}
-                  className="flex items-center gap-1.5 rounded-lg border border-[var(--color-border-strong)] px-4 py-2 text-sm font-medium text-[var(--color-text-primary)] transition-colors hover:border-signal hover:text-signal disabled:opacity-50"
+                  className="flex items-center gap-1.5 rounded-lg border border-line-strong px-4 py-2 text-sm font-medium text-ink transition-colors hover:border-signal hover:text-signal disabled:opacity-50"
                 >
                   <CloudUpload size={15} /> Use this record (push it to the repository)
                 </button>
@@ -249,7 +249,7 @@ export const RepoSyncCard = () => {
                 <button
                   onClick={doFetch}
                   disabled={busy !== null || pendingPlan !== null}
-                  className="flex items-center gap-1.5 rounded-lg border border-[var(--color-border-strong)] px-4 py-2 text-sm font-medium text-[var(--color-text-primary)] transition-colors hover:border-signal hover:text-signal disabled:opacity-50"
+                  className="flex items-center gap-1.5 rounded-lg border border-line-strong px-4 py-2 text-sm font-medium text-ink transition-colors hover:border-signal hover:text-signal disabled:opacity-50"
                 >
                   {busy === "fetch" ? <Loader2 size={15} className="animate-spin" /> : <CloudDownload size={15} />}
                   Fetch latest
@@ -257,7 +257,7 @@ export const RepoSyncCard = () => {
                 <button
                   onClick={doPush}
                   disabled={busy !== null || pendingPlan !== null}
-                  className="flex items-center gap-1.5 rounded-lg bg-[var(--color-text-primary)] px-4 py-2 text-sm font-medium text-[var(--color-background)] transition-opacity hover:opacity-90 disabled:opacity-50"
+                  className="flex items-center gap-1.5 rounded-lg bg-ink px-4 py-2 text-sm font-medium text-surface transition-opacity hover:opacity-90 disabled:opacity-50"
                 >
                   {busy === "push" ? <Loader2 size={15} className="animate-spin" /> : <CloudUpload size={15} />}
                   Push changes
@@ -275,7 +275,7 @@ export const RepoSyncCard = () => {
 
           {pendingPlan && (
             <div className="space-y-3 rounded-lg border border-signal/60 p-4">
-              <p className="m-0 text-sm font-medium text-[var(--color-text-primary)]">
+              <p className="m-0 text-sm font-medium text-ink">
                 {pendingPlan.plan.conflicts.length} file
                 {pendingPlan.plan.conflicts.length === 1 ? "" : "s"} changed on both sides.
                 Choose per file, then apply.
@@ -283,10 +283,10 @@ export const RepoSyncCard = () => {
               <div className="max-h-64 space-y-2 overflow-y-auto pr-1">
                 {pendingPlan.plan.conflicts.map((c) => (
                   <div key={c.path} className="flex flex-wrap items-center justify-between gap-2 text-sm">
-                    <span className="min-w-0 truncate font-mono text-xs text-[var(--color-text-primary)]">
+                    <span className="min-w-0 truncate font-mono text-xs text-ink">
                       {fileLabel(c.path)}
                       {c.kind !== "edit" && (
-                        <span className="ml-2 text-[var(--color-text-secondary)]">
+                        <span className="ml-2 text-muted">
                           ({c.kind === "local-delete" ? "deleted here, edited there" : "edited here, deleted there"})
                         </span>
                       )}
@@ -298,8 +298,8 @@ export const RepoSyncCard = () => {
                           onClick={() => setResolutions((prev) => ({ ...prev, [c.path]: r }))}
                           className={`rounded px-2.5 py-1 text-xs font-medium transition-colors ${
                             resolutions[c.path] === r
-                              ? "bg-[var(--color-text-primary)] text-[var(--color-background)]"
-                              : "border border-[var(--color-border-strong)] text-[var(--color-text-secondary)] hover:text-signal"
+                              ? "bg-ink text-surface"
+                              : "border border-line-strong text-muted hover:text-signal"
                           }`}
                         >
                           {r === "mine" ? "Keep mine" : "Take theirs"}
@@ -313,13 +313,13 @@ export const RepoSyncCard = () => {
                 <button
                   onClick={applyResolutions}
                   disabled={!allResolved || busy !== null}
-                  className="rounded-lg bg-[var(--color-text-primary)] px-4 py-2 text-sm font-medium text-[var(--color-background)] transition-opacity hover:opacity-90 disabled:opacity-50"
+                  className="rounded-lg bg-ink px-4 py-2 text-sm font-medium text-surface transition-opacity hover:opacity-90 disabled:opacity-50"
                 >
                   Apply resolutions
                 </button>
                 <button
                   onClick={() => setPendingPlan(null)}
-                  className="rounded-lg border border-[var(--color-border-strong)] px-4 py-2 text-sm font-medium text-[var(--color-text-secondary)] hover:text-signal"
+                  className="rounded-lg border border-line-strong px-4 py-2 text-sm font-medium text-muted hover:text-signal"
                 >
                   Cancel
                 </button>
@@ -329,7 +329,7 @@ export const RepoSyncCard = () => {
 
           <button
             onClick={() => setConfirmDisconnect(true)}
-            className="flex items-center gap-1.5 text-xs font-medium text-[var(--color-text-secondary)] hover:text-signal"
+            className="flex items-center gap-1.5 text-xs font-medium text-muted hover:text-signal"
           >
             <Unplug size={13} /> Disconnect (keeps the local record)
           </button>

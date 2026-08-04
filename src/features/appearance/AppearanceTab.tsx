@@ -38,7 +38,7 @@ const defaultState = (): StoredPalette => loadStoredPalette() ?? fromSeed();
 
 /** Mini strip shown on preset cards: ground, card, ink, signal, field, pulse. */
 const Strip = ({ m }: { m: PaletteMode }) => (
-  <span className="flex overflow-hidden rounded-ctl border border-[var(--color-border)]">
+  <span className="flex overflow-hidden rounded-ctl border border-line">
     {[m.background, m.card, m.textPrimary, m.signal, m.field, m.pulse].map((c, i) => (
       <i key={i} className="h-4 w-4" style={{ background: c }} />
     ))}
@@ -113,12 +113,12 @@ export const AppearanceTab = () => {
   return (
     <div className="space-y-8">
       {/* ── Presets ─────────────────────────────────────────────── */}
-      <section className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-2xl p-6">
+      <section className="bg-card border border-line rounded-2xl p-6">
         <div className="mb-1 flex items-center gap-2">
-          <Paintbrush size={16} className="text-[var(--color-text-secondary)]" />
-          <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">Palette</h2>
+          <Paintbrush size={16} className="text-muted" />
+          <h2 className="text-lg font-semibold text-ink">Palette</h2>
         </div>
-        <p className="mb-5 text-sm text-[var(--color-text-secondary)]">
+        <p className="mb-5 text-sm text-muted">
           Presets swap every color token at once. The change applies live to this panel,
           saves to this browser, and rides in the portfolio export so the resume builder
           matches. Editing any single color below forks the palette into a custom one,
@@ -136,14 +136,14 @@ export const AppearanceTab = () => {
                 className={`rounded-card border p-4 text-left transition-colors ${
                   active
                     ? "border-signal ring-1 ring-signal/40"
-                    : "border-[var(--color-border)] hover:border-[var(--color-border-strong)]"
+                    : "border-line hover:border-line-strong"
                 }`}
               >
                 <div className="mb-2 flex items-center justify-between gap-2">
-                  <span className="font-medium text-[var(--color-text-primary)]">
+                  <span className="font-medium text-ink">
                     {p.name}
                     {p.id === SEED_PALETTE.basedOn && (
-                      <span className="ml-2 font-mono text-[9.5px] uppercase tracking-[0.09em] text-[var(--color-text-secondary)]">
+                      <span className="ml-2 font-mono text-[9.5px] uppercase tracking-[0.09em] text-muted">
                         deployed
                       </span>
                     )}
@@ -154,7 +154,7 @@ export const AppearanceTab = () => {
                   <Strip m={p.light} />
                   <Strip m={p.dark} />
                 </div>
-                <p className="m-0 text-xs leading-relaxed text-[var(--color-text-secondary)]">
+                <p className="m-0 text-xs leading-relaxed text-muted">
                   {p.story}
                 </p>
               </button>
@@ -175,11 +175,11 @@ export const AppearanceTab = () => {
                 className={`cursor-pointer rounded-card border p-4 text-left transition-colors ${
                   active
                     ? "border-signal ring-1 ring-signal/40"
-                    : "border-[var(--color-border)] hover:border-[var(--color-border-strong)]"
+                    : "border-line hover:border-line-strong"
                 }`}
               >
                 <div className="mb-2 flex items-center justify-between gap-2">
-                  <span className="min-w-0 truncate font-medium text-[var(--color-text-primary)]">
+                  <span className="min-w-0 truncate font-medium text-ink">
                     {c.name}
                   </span>
                   <span className="flex shrink-0 items-center gap-1.5">
@@ -189,7 +189,7 @@ export const AppearanceTab = () => {
                         e.stopPropagation();
                         deleteProfile(c.id);
                       }}
-                      className="p-0.5 text-[var(--color-text-secondary)] hover:text-red-500"
+                      className="p-0.5 text-muted hover:text-red-500"
                       aria-label={`Delete the ${c.name} profile`}
                       title="Delete this profile"
                     >
@@ -201,7 +201,7 @@ export const AppearanceTab = () => {
                   <Strip m={c.light} />
                   <Strip m={c.dark} />
                 </div>
-                <p className="m-0 text-xs leading-relaxed text-[var(--color-text-secondary)]">
+                <p className="m-0 text-xs leading-relaxed text-muted">
                   Saved custom profile.
                 </p>
               </div>
@@ -210,14 +210,14 @@ export const AppearanceTab = () => {
           {activePresetId === "custom" && (
             <div className="rounded-card border border-dashed border-signal/60 p-4">
               <div className="mb-2 flex items-center justify-between gap-2">
-                <span className="font-medium text-[var(--color-text-primary)]">Custom</span>
+                <span className="font-medium text-ink">Custom</span>
                 <Check size={15} className="shrink-0 text-signal" />
               </div>
               <div className="mb-2.5 flex items-center gap-2">
                 <Strip m={palette.light} />
                 <Strip m={palette.dark} />
               </div>
-              <p className="m-0 mb-2 text-xs leading-relaxed text-[var(--color-text-secondary)]">
+              <p className="m-0 mb-2 text-xs leading-relaxed text-muted">
                 Your own mix, not on the shelf yet. Name it to keep it.
               </p>
               <div className="flex items-center gap-1.5">
@@ -229,12 +229,12 @@ export const AppearanceTab = () => {
                   }}
                   placeholder="Profile name"
                   aria-label="Name for this custom profile"
-                  className="w-full min-w-0 rounded-lg border border-[var(--color-border)] bg-[var(--color-input-bg)] px-2 py-1.5 text-xs text-[var(--color-text-primary)] outline-none focus:border-signal"
+                  className="w-full min-w-0 rounded-lg border border-line bg-well px-2 py-1.5 text-xs text-ink outline-none focus:border-signal"
                 />
                 <button
                   onClick={saveAsProfile}
                   disabled={!profileName.trim()}
-                  className="flex shrink-0 items-center gap-1 rounded-lg bg-[var(--color-text-primary)] px-2.5 py-1.5 text-xs font-medium text-[var(--color-background)] transition-opacity hover:opacity-90 disabled:opacity-40"
+                  className="flex shrink-0 items-center gap-1 rounded-lg bg-ink px-2.5 py-1.5 text-xs font-medium text-surface transition-opacity hover:opacity-90 disabled:opacity-40"
                 >
                   <Save size={12} /> Save
                 </button>
@@ -245,9 +245,9 @@ export const AppearanceTab = () => {
       </section>
 
       {/* ── Live preview ────────────────────────────────────────── */}
-      <section className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-2xl p-6">
-        <h2 className="mb-1 text-lg font-semibold text-[var(--color-text-primary)]">Preview</h2>
-        <p className="mb-5 text-sm text-[var(--color-text-secondary)]">
+      <section className="bg-card border border-line rounded-2xl p-6">
+        <h2 className="mb-1 text-lg font-semibold text-ink">Preview</h2>
+        <p className="mb-5 text-sm text-muted">
           Both modes of the palette you're editing, rendered on the site's real
           patterns: chips, pills, pixel band, ledger, count cells, footer.
         </p>
@@ -258,21 +258,21 @@ export const AppearanceTab = () => {
       </section>
 
       {/* ── Token editor ────────────────────────────────────────── */}
-      <section className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-2xl p-6">
-        <h2 className="mb-1 text-lg font-semibold text-[var(--color-text-primary)]">Colors</h2>
-        <p className="mb-5 text-sm text-[var(--color-text-secondary)]">
+      <section className="bg-card border border-line rounded-2xl p-6">
+        <h2 className="mb-1 text-lg font-semibold text-ink">Colors</h2>
+        <p className="mb-5 text-sm text-muted">
           Every token, what it drives, and its value in each mode. Changes apply
           as you pick.
         </p>
 
-        <div className="hidden grid-cols-[minmax(0,1fr)_150px_150px] gap-3 border-b border-dashed border-[var(--color-border)] pb-2 md:grid">
-          <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--color-text-secondary)]">
+        <div className="hidden grid-cols-[minmax(0,1fr)_150px_150px] gap-3 border-b border-dashed border-line pb-2 md:grid">
+          <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted">
             Token: where it shows up
           </span>
-          <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--color-text-secondary)]">
+          <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted">
             Light
           </span>
-          <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--color-text-secondary)]">
+          <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted">
             Dark
           </span>
         </div>
@@ -280,17 +280,17 @@ export const AppearanceTab = () => {
         {TOKEN_GUIDE.map((t) => (
           <div
             key={t.key}
-            className="grid grid-cols-1 items-center gap-3 border-b border-dashed border-[var(--color-border)] py-3 md:grid-cols-[minmax(0,1fr)_150px_150px]"
+            className="grid grid-cols-1 items-center gap-3 border-b border-dashed border-line py-3 md:grid-cols-[minmax(0,1fr)_150px_150px]"
           >
             <div>
-              <p className="m-0 text-sm font-medium text-[var(--color-text-primary)]">{t.label}</p>
-              <p className="m-0 mt-0.5 text-xs leading-relaxed text-[var(--color-text-secondary)]">
+              <p className="m-0 text-sm font-medium text-ink">{t.label}</p>
+              <p className="m-0 mt-0.5 text-xs leading-relaxed text-muted">
                 {t.where}
               </p>
             </div>
             {(["light", "dark"] as const).map((mode) => (
               <div key={mode} className="flex items-center gap-2">
-                <span className="font-mono text-[9px] uppercase text-[var(--color-text-secondary)] md:hidden">
+                <span className="font-mono text-[9px] uppercase text-muted md:hidden">
                   {mode}
                 </span>
                 <input
@@ -301,7 +301,7 @@ export const AppearanceTab = () => {
                     setToken(mode, t.key, e.target.value);
                   }}
                   aria-label={`${t.label}: ${mode} mode`}
-                  className="h-8 w-9 shrink-0 cursor-pointer rounded-ctl border border-[var(--color-border-strong)] bg-transparent p-0.5"
+                  className="h-8 w-9 shrink-0 cursor-pointer rounded-ctl border border-line-strong bg-transparent p-0.5"
                 />
                 <input
                   type="text"
@@ -310,7 +310,7 @@ export const AppearanceTab = () => {
                   onBlur={() => setHexDrafts((d) => ({ ...d, [`${mode}.${t.key}`]: palette[mode][t.key] }))}
                   spellCheck={false}
                   aria-label={`${t.label} hex: ${mode} mode`}
-                  className="w-[92px] rounded-lg border border-[var(--color-border)] bg-[var(--color-input-bg)] px-2 py-1.5 font-mono text-xs text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-signal/50"
+                  className="w-[92px] rounded-lg border border-line bg-well px-2 py-1.5 font-mono text-xs text-ink focus:outline-none focus:ring-2 focus:ring-signal/50"
                 />
               </div>
             ))}
@@ -318,14 +318,14 @@ export const AppearanceTab = () => {
         ))}
 
         <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
-          <p className="m-0 text-xs text-[var(--color-text-secondary)]">
+          <p className="m-0 text-xs text-muted">
             Rules of thumb: <strong>Signal</strong> must survive as text on the ground;{" "}
             <strong>Field</strong> is fills only; <strong>Pulse</strong> is ornament and
             should never carry meaning.
           </p>
           <button
             onClick={() => setConfirmReset(true)}
-            className="flex items-center gap-1.5 rounded-lg border border-[var(--color-border)] px-3 py-2 text-sm font-medium text-[var(--color-text-secondary)] transition-colors hover:bg-[var(--color-background)] hover:text-[var(--color-text-primary)]"
+            className="flex items-center gap-1.5 rounded-lg border border-line px-3 py-2 text-sm font-medium text-muted transition-colors hover:bg-surface hover:text-ink"
           >
             <RotateCcw size={14} />
             Reset to deployed default
@@ -334,9 +334,9 @@ export const AppearanceTab = () => {
       </section>
 
       {/* ── Publish ─────────────────────────────────────────────── */}
-      <section className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-2xl p-6">
-        <h2 className="mb-1 text-lg font-semibold text-[var(--color-text-primary)]">Publish</h2>
-        <p className="mb-4 text-sm text-[var(--color-text-secondary)]">
+      <section className="bg-card border border-line rounded-2xl p-6">
+        <h2 className="mb-1 text-lg font-semibold text-ink">Publish</h2>
+        <p className="mb-4 text-sm text-muted">
           Everything above lives in this browser until it reaches the site repo. The
           repository connection pushes{" "}
           <code className="font-mono text-xs">src/content/settings/palette.json</code>{" "}
@@ -345,7 +345,7 @@ export const AppearanceTab = () => {
         </p>
         <button
           onClick={exportSeedFile}
-          className="flex items-center gap-1.5 rounded-lg bg-[var(--color-text-primary)] px-4 py-2 text-sm font-medium text-[var(--color-background)] transition-opacity hover:opacity-90"
+          className="flex items-center gap-1.5 rounded-lg bg-ink px-4 py-2 text-sm font-medium text-surface transition-opacity hover:opacity-90"
         >
           <FileDown size={15} />
           Download palette.json

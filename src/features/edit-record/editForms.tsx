@@ -291,12 +291,12 @@ const ProjectFields = ({ draft, set }: FormProps) => (
       <Field label="Date" type="date" value={str(draft, "date")} onChange={(v) => set("date", v)} />
       <Field label="Project Link" value={str(draft, "link")} onChange={(v) => set("link", v)} />
     </Row>
-    <label className="flex w-fit cursor-pointer items-center gap-2.5 text-sm font-medium text-[var(--color-text-secondary)]">
+    <label className="flex w-fit cursor-pointer items-center gap-2.5 text-sm font-medium text-muted">
       <input
         type="checkbox"
         checked={draft.featured === true}
         onChange={(e) => set("featured", e.target.checked)}
-        className="h-4 w-4 accent-[var(--color-field)]"
+        className="h-4 w-4 accent-field"
       />
       Featured: headline the home page's Selected work chapter
     </label>

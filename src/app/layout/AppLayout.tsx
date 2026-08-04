@@ -11,11 +11,11 @@ import { ThemeToggle } from "./ThemeToggle";
  * @returns The page frame with the given content inside the rail.
  */
 export const AppLayout = ({ children }: { children: ReactNode }) => (
-  <div className="min-h-screen bg-[var(--color-background)] font-sans text-[var(--color-text-primary)]">
+  <div className="min-h-screen bg-surface font-sans text-ink">
     <div className="fixed right-4 top-4 z-50">
       <ThemeToggle />
     </div>
-    <main className="mx-auto min-h-screen max-w-[1180px] border-[var(--color-border)] px-5 pb-10 pt-8 md:border-x md:border-dashed">
+    <main className="mx-auto min-h-screen max-w-[1180px] border-line px-5 pb-10 pt-8 md:border-x md:border-dashed">
       {children}
     </main>
   </div>

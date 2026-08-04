@@ -40,13 +40,13 @@ export const TagInput = ({
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          className="flex-1 px-3 py-2 bg-[var(--color-input-bg)] border border-[var(--color-border)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-signal/50 text-[var(--color-text-primary)] placeholder-gray-400"
+          className="flex-1 px-3 py-2 bg-well border border-line rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-signal/50 text-ink placeholder-gray-400"
           placeholder={placeholder}
         />
         <button
           type="button"
           onClick={handleAdd}
-          className="px-3 py-2 bg-[var(--color-background)] border border-[var(--color-border)] text-[var(--color-text-secondary)] rounded-lg hover:bg-[var(--color-border)] transition-colors"
+          className="px-3 py-2 bg-surface border border-line text-muted rounded-lg hover:bg-line transition-colors"
         >
           <Plus size={18} />
         </button>
@@ -55,7 +55,7 @@ export const TagInput = ({
         {tags.map((tag) => (
           <span
             key={tag}
-            className="inline-flex items-center gap-1 rounded-ctl border border-[var(--color-border-strong)] px-2 py-[3px] font-mono text-[10.5px] uppercase tracking-[0.09em] text-[var(--color-text-secondary)]"
+            className="inline-flex items-center gap-1 rounded-ctl border border-line-strong px-2 py-[3px] font-mono text-[10.5px] uppercase tracking-[0.09em] text-muted"
           >
             {tag}
             <button

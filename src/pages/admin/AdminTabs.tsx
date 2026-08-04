@@ -80,7 +80,7 @@ export const AdminTabs = ({ activeTab, onChange }: AdminTabsProps) => {
     <div className="space-y-2 pb-2">
       {TAB_GROUPS.map((group) => (
         <div key={group.label} className="flex items-center gap-2">
-          <span className="w-16 shrink-0 font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-[var(--color-text-secondary)]">
+          <span className="w-16 shrink-0 font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-muted">
             {group.label}
           </span>
           <div className="flex flex-wrap items-center gap-2">
@@ -91,8 +91,8 @@ export const AdminTabs = ({ activeTab, onChange }: AdminTabsProps) => {
                 className={cn(
                   "flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap",
                   activeTab === tab.id
-                    ? "bg-[var(--color-text-primary)] text-[var(--color-background)] shadow-sm"
-                    : "bg-[var(--color-card)] text-[var(--color-text-secondary)] hover:bg-[var(--color-background)] border border-[var(--color-border)]"
+                    ? "bg-ink text-surface shadow-sm"
+                    : "bg-card text-muted hover:bg-surface border border-line"
                 )}
               >
                 <tab.icon size={15} />

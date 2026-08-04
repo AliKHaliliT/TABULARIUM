@@ -53,7 +53,7 @@ export const PalettePreview = ({ mode, label }: { mode: PaletteMode; label: stri
 
   return (
   <figure className="m-0 min-w-0">
-    <figcaption className="mb-2 font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--color-text-secondary)]">
+    <figcaption className="mb-2 font-mono text-[10px] uppercase tracking-[0.12em] text-muted">
       {label}
     </figcaption>
     <div

@@ -60,10 +60,12 @@ These are non-negotiable. Depth lives in the indexed documents; this is the chec
   `import.meta.env`.
 - **Motion runs behind `LazyMotion` strict** (`domAnimation` features): always import and
   use `m.` from framer-motion, never `motion.` (a `motion.` component throws at runtime).
-- **Colors come from the tokens** in `src/app/styles/tokens.css` (`--color-card`,
-  `--color-signal`, and so on), reached either as a token utility or as the variable;
-  never hardcode a color and never reach for a raw palette class. The design language is
-  the dossier: data is square, actions are round, one working accent.
+- **Colors come only from the token utilities** defined in `src/app/styles/tokens.css`
+  (`bg-surface`, `text-ink`, `border-line`, `text-signal`, and so on). Never hardcode a
+  color, never reach for a raw palette class, and never spell a token the long way as
+  `bg-[var(--surface)]`; a composite value such as a `color-mix()` is the only place the
+  variable itself appears. The design language is the dossier: data is square, actions are
+  round, one working accent.
 - **Self-containment.** This app imports only npm packages plus its own `src/`. The shared
   core (`types/content.ts`, the services, the lib modules) is this repo's own copy; sister
   repos share by copying, never by importing, and the portfolio contract's

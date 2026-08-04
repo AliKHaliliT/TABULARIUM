@@ -125,11 +125,11 @@ export const EditModal = ({
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="bg-[var(--color-card)] w-full max-w-4xl rounded-card shadow-overlay border border-[var(--color-border)] flex flex-col max-h-[90vh]"
+          className="bg-card w-full max-w-4xl rounded-card shadow-overlay border border-line flex flex-col max-h-[90vh]"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="flex items-center justify-between p-6 border-b border-[var(--color-border)]">
-            <h2 className="text-xl font-bold text-[var(--color-text-primary)]">
+          <div className="flex items-center justify-between p-6 border-b border-line">
+            <h2 className="text-xl font-bold text-ink">
               {isNew ? "New" : "Edit"} {MODAL_TITLES[type] || "Item"}
             </h2>
             {/* The single dismiss control (Escape and backdrop click also
@@ -138,9 +138,9 @@ export const EditModal = ({
               onClick={onClose}
               title="Close (Esc)"
               aria-label="Close"
-              className="flex h-10 w-10 items-center justify-center hover:bg-[var(--color-background)] rounded-full transition-colors"
+              className="flex h-10 w-10 items-center justify-center hover:bg-surface rounded-full transition-colors"
             >
-              <X size={20} className="text-[var(--color-text-secondary)]" />
+              <X size={20} className="text-muted" />
             </button>
           </div>
 
@@ -148,7 +148,7 @@ export const EditModal = ({
             <TypeFields type={type} draft={formData} set={set} />
           </div>
 
-          <div className="p-6 border-t border-[var(--color-border)] flex items-center justify-end gap-4 bg-[var(--color-card)] rounded-b-card">
+          <div className="p-6 border-t border-line flex items-center justify-end gap-4 bg-card rounded-b-card">
             {error && (
               <p
                 role="alert"
@@ -159,7 +159,7 @@ export const EditModal = ({
             )}
             <button
               onClick={handleSave}
-              className="px-6 py-2 text-sm font-medium bg-[var(--color-text-primary)] text-[var(--color-background)] rounded-lg hover:opacity-90 transition-opacity"
+              className="px-6 py-2 text-sm font-medium bg-ink text-surface rounded-lg hover:opacity-90 transition-opacity"
             >
               Save
             </button>

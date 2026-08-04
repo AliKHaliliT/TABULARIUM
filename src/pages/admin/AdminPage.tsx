@@ -41,7 +41,7 @@ const TAB_TO_CONTENT_TYPE: Record<
  *  lintel laid across the top so the six cells become columns (matches
  *  favicon.svg). */
 const BrandMark = () => (
-  <svg viewBox="0 0 32 32" className="h-9 w-9 text-[var(--color-text-primary)]" aria-hidden="true">
+  <svg viewBox="0 0 32 32" className="h-9 w-9 text-ink" aria-hidden="true">
     <rect x="2.5" y="3" width="27" height="3.75" fill="currentColor" />
     <rect x="2.5" y="9.5" width="7.5" height="7.5" fill="currentColor" />
     <rect x="12.25" y="9.5" width="7.5" height="7.5" fill="#ff6b2e" />
@@ -185,11 +185,11 @@ export const Admin = () => {
       <div>
         <div className="flex items-center gap-3 mb-2">
           <BrandMark />
-          <h1 className="text-3xl font-bold tracking-[0.06em] text-[var(--color-text-primary)]">
+          <h1 className="text-3xl font-bold tracking-[0.06em] text-ink">
             TABULARIUM
           </h1>
         </div>
-        <p className="text-[var(--color-text-secondary)] ml-12">
+        <p className="text-muted ml-12">
           The admin panel: every ledger of the record, in one place
         </p>
       </div>
@@ -205,9 +205,9 @@ export const Admin = () => {
       ) : activeTab === "appearance" ? (
         <AppearanceTab />
       ) : (
-        <div className="bg-[var(--color-card)] border border-[var(--color-border)] rounded-2xl p-6">
+        <div className="bg-card border border-line rounded-2xl p-6">
           <div className="flex justify-between items-center mb-6">
-            <p className="text-sm text-[var(--color-text-secondary)]">
+            <p className="text-sm text-muted">
               {items.length} {items.length === 1 ? "item" : "items"}
             </p>
             <button
@@ -216,7 +216,7 @@ export const Admin = () => {
                 setIsNewItem(true);
                 setIsModalOpen(true);
               }}
-              className="flex items-center gap-2 px-4 py-2 bg-[var(--color-text-primary)] text-[var(--color-background)] rounded-lg text-sm font-medium hover:opacity-90 transition-opacity"
+              className="flex items-center gap-2 px-4 py-2 bg-ink text-surface rounded-lg text-sm font-medium hover:opacity-90 transition-opacity"
             >
               <Plus size={16} /> Add New
             </button>
@@ -228,9 +228,9 @@ export const Admin = () => {
               return (
                 <div
                   key={d.id}
-                  className="flex items-center gap-4 p-4 border border-[var(--color-border)] rounded-xl hover:bg-[var(--color-background)]/60 transition-colors"
+                  className="flex items-center gap-4 p-4 border border-line rounded-xl hover:bg-surface/60 transition-colors"
                 >
-                  <div className="w-14 h-10 rounded-lg bg-[var(--color-background)] overflow-hidden flex-shrink-0">
+                  <div className="w-14 h-10 rounded-lg bg-surface overflow-hidden flex-shrink-0">
                     {d.image ? (
                       <img
                         src={d.image}
@@ -238,30 +238,30 @@ export const Admin = () => {
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-[var(--color-text-secondary)] text-xs">
+                      <div className="w-full h-full flex items-center justify-center text-muted text-xs">
                         -
                       </div>
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-0.5">
-                      <h3 className="font-semibold text-[var(--color-text-primary)] truncate text-sm">
+                      <h3 className="font-semibold text-ink truncate text-sm">
                         {d.title}
                       </h3>
                       {d.badge && (
-                        <span className="px-2 py-0.5 text-[10px] font-medium bg-[var(--color-background)] text-[var(--color-text-secondary)] rounded-full whitespace-nowrap">
+                        <span className="px-2 py-0.5 text-[10px] font-medium bg-surface text-muted rounded-full whitespace-nowrap">
                           {d.badge}
                         </span>
                       )}
                     </div>
-                    <p className="text-xs text-[var(--color-text-secondary)] truncate">
+                    <p className="text-xs text-muted truncate">
                       {d.subtitle}
                     </p>
                   </div>
                   <div className="flex items-center gap-1 flex-shrink-0">
                     <button
                       onClick={() => ContentService.downloadMarkdown(item)}
-                      className="p-2 text-[var(--color-text-secondary)] hover:text-signal hover:bg-field/10 rounded-lg transition-colors"
+                      className="p-2 text-muted hover:text-signal hover:bg-field/10 rounded-lg transition-colors"
                       title="Download as Markdown"
                     >
                       <Download size={15} />
@@ -272,14 +272,14 @@ export const Admin = () => {
                         setIsNewItem(false);
                         setIsModalOpen(true);
                       }}
-                      className="p-2 text-[var(--color-text-secondary)] hover:text-signal hover:bg-field/10 rounded-lg transition-colors"
+                      className="p-2 text-muted hover:text-signal hover:bg-field/10 rounded-lg transition-colors"
                       title="Edit"
                     >
                       <Edit2 size={15} />
                     </button>
                     <button
                       onClick={() => handleDelete(item.id)}
-                      className="p-2 text-[var(--color-text-secondary)] hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                      className="p-2 text-muted hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
                       title="Delete"
                     >
                       <Trash2 size={15} />
@@ -289,7 +289,7 @@ export const Admin = () => {
               );
             })}
             {items.length === 0 && (
-              <div className="text-center py-16 text-[var(--color-text-secondary)]">
+              <div className="text-center py-16 text-muted">
                 <p className="text-4xl mb-4">📭</p>
                 <p className="font-medium">No items yet.</p>
                 <p className="text-sm mt-1">Click "Add New" to create one.</p>

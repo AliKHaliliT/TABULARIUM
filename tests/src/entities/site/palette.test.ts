@@ -63,19 +63,24 @@ describe("seed palette (src/content/settings/palette.json)", () => {
 describe("generatePaletteCss", () => {
   const p = getPreset("meridian")!;
 
-  it("scopes light to :root:root and dark to :root:root.dark", () => {
+  it("scopes light to :root:root and dark to the dark theme attribute", () => {
     const css = generatePaletteCss(p);
     expect(css).toContain(":root:root {");
-    expect(css).toContain(":root:root.dark {");
+    expect(css).toContain(':root:root[data-theme="dark"] {');
   });
 
-  it("writes every token variable plus the canopy alias", () => {
+  it("writes the raw variable layer that the token utilities resolve through", () => {
     const css = generatePaletteCss(p);
-    expect(css).toContain(`--color-background: ${p.light.background};`);
-    expect(css).toContain(`--color-footer-ink: ${p.dark.footerInk};`);
-    // canopy follows signal in each mode
-    expect(css).toContain(`--color-canopy: ${p.light.signal};`);
-    expect(css).toContain(`--color-canopy: ${p.dark.signal};`);
+    expect(css).toContain(`--surface: ${p.light.background};`);
+    expect(css).toContain(`--footer-ink: ${p.dark.footerInk};`);
+  });
+
+  it("writes each variable exactly once per mode", () => {
+    // The override used to append a legacy alias of the accent, which became a
+    // duplicate declaration once the variables took their own names.
+    const light = generatePaletteCss(p).split("\n")[0];
+    const signals = light.match(/--signal:/g) ?? [];
+    expect(signals).toHaveLength(1);
   });
 });
 

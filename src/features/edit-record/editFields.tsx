@@ -7,9 +7,9 @@ import { Upload } from "lucide-react";
 import { TagInput, RichTextEditor } from "@/shared/ui";
 
 const INPUT_CLS =
-  "w-full px-3 py-2 bg-[var(--color-input-bg)] border border-[var(--color-border)] rounded-lg text-sm text-[var(--color-text-primary)]";
+  "w-full px-3 py-2 bg-well border border-line rounded-lg text-sm text-ink";
 
-const LABEL_CLS = "text-sm font-medium text-[var(--color-text-secondary)]";
+const LABEL_CLS = "text-sm font-medium text-muted";
 
 /** Two-column (single on mobile) field row. */
 export const Row = ({ children }: { children: ReactNode }) => (
@@ -37,7 +37,7 @@ export const Field = ({
       <div className="relative">
         <Upload
           size={16}
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)]"
+          className="absolute left-3 top-1/2 -translate-y-1/2 text-muted"
         />
         <input
           type={type}

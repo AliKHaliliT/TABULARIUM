@@ -2,7 +2,7 @@ import { Plus, Trash2 } from "lucide-react";
 import { parseProfileLinks, ProfileLink, LINK_ICONS, LINK_ICON_NAMES } from "@/shared/lib";
 
 const INPUT_CLS =
-  "w-full px-3 py-2 bg-[var(--color-input-bg)] border border-[var(--color-border)] rounded-lg text-sm text-[var(--color-text-primary)]";
+  "w-full px-3 py-2 bg-well border border-line rounded-lg text-sm text-ink";
 
 /** Serialize rows back into the profile `links` string format. */
 const serialize = (rows: ProfileLink[]): string =>
@@ -61,7 +61,7 @@ export const LinksEditor = ({
               className={INPUT_CLS}
             />
             <div className="flex items-center gap-2">
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[var(--color-border)] text-[var(--color-text-secondary)]">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-line text-muted">
                 {Icon ? (
                   <Icon size={14} />
                 ) : (
@@ -93,7 +93,7 @@ export const LinksEditor = ({
             <button
               onClick={() => remove(i)}
               title="Remove link"
-              className="flex h-9 w-9 items-center justify-center rounded-lg border border-[var(--color-border)] text-[var(--color-text-secondary)] transition-colors hover:border-red-400 hover:text-red-400"
+              className="flex h-9 w-9 items-center justify-center rounded-lg border border-line text-muted transition-colors hover:border-red-400 hover:text-red-400"
             >
               <Trash2 size={14} />
             </button>
@@ -102,7 +102,7 @@ export const LinksEditor = ({
       })}
       <button
         onClick={add}
-        className="flex items-center gap-2 rounded-lg border border-dashed border-[var(--color-border)] px-3 py-2 text-sm text-[var(--color-text-secondary)] transition-colors hover:border-[var(--color-border-strong)] hover:text-[var(--color-text-primary)]"
+        className="flex items-center gap-2 rounded-lg border border-dashed border-line px-3 py-2 text-sm text-muted transition-colors hover:border-line-strong hover:text-ink"
       >
         <Plus size={14} />
         Add link

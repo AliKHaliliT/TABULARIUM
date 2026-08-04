@@ -7,7 +7,10 @@ Current project status. Read this before starting work. Format and rules: see
 
 - The source tree moved to one-way sliced layers after the client template in the style
   family, and both record doors are now checked at the boundary (2026-08-04). The
-  reasoning is in decisions 0004 through 0006; the layer rule is enforced by review only.
+  reasoning is in decisions 0004 through 0006.
+- The layer rule is now checked by ESLint rather than by review, and the design tokens moved
+  to the template's two-layer shape with semantic names behind a `data-theme` attribute
+  (2026-08-04). Decisions 0007 and 0008 carry the reasoning.
 - The repository is public: badges, the License section, and the sister READMEs' source
   links all resolve for visitors now (2026-08-01).
 - The docs baseline synced with the 2026-08-01 My-Styles changes, adopting the sharpened
@@ -26,15 +29,9 @@ Current project status. Read this before starting work. Format and rules: see
 
 ## Deferred
 
-- Adopt a boundary linter (eslint-plugin-boundaries or similar) so the layer rule is
-  checked rather than reviewed; deferred until the rule has proven itself in practice
-  (2026-08-04).
 - Consider inverting the content bundle's dependencies so it takes the site identity and
   palette as arguments; that would let the repo sync and the zip export be two features
   instead of one `publish` slice (2026-08-04).
-- Normalize the verbose token spelling, where a class string says `bg-[var(--color-card)]`
-  and the token utility `bg-card` compiles to the same rule. Both honor the token rule, so
-  this is consistency work rather than a fix (2026-08-04).
 - Bring every export up to the doc-comment convention. The files touched by the layer move
   carry it; the rest still carry their original informal comments (2026-08-04).
 - A diff preview inside the conflict dialog (today it names the file and the divergence
