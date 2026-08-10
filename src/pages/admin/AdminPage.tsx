@@ -280,7 +280,7 @@ export const Admin = () => {
                     </button>
                     <button
                       onClick={() => handleDelete(item.id)}
-                      className="p-2 text-muted hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                      className="p-2 text-muted hover:text-danger hover:bg-danger dark:hover:bg-danger/20 rounded-lg transition-colors"
                       title="Delete"
                     >
                       <Trash2 size={15} />

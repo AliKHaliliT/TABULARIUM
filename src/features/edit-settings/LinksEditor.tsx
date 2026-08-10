@@ -93,7 +93,7 @@ export const LinksEditor = ({
             <button
               onClick={() => remove(i)}
               title="Remove link"
-              className="flex h-9 w-9 items-center justify-center rounded-lg border border-line text-muted transition-colors hover:border-red-400 hover:text-red-400"
+              className="flex h-9 w-9 items-center justify-center rounded-lg border border-line text-muted transition-colors hover:border-danger hover:text-danger"
             >
               <Trash2 size={14} />
             </button>

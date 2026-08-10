@@ -390,7 +390,7 @@ export const RepoSyncCard = () => {
         </>
       )}
 
-      {error && <p className="m-0 text-sm text-red-500">{error}</p>}
+      {error && <p className="m-0 text-sm text-danger">{error}</p>}
       {notice && <p className="m-0 text-sm text-signal">{notice}</p>}
 
       <ConfirmDialog

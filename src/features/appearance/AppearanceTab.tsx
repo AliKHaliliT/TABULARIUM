@@ -190,7 +190,7 @@ export const AppearanceTab = () => {
                         e.stopPropagation();
                         deleteProfile(c.id);
                       }}
-                      className="p-0.5 text-muted hover:text-red-500"
+                      className="p-0.5 text-muted hover:text-danger"
                       aria-label={`Delete the ${c.name} profile`}
                       title="Delete this profile"
                     >

@@ -153,7 +153,7 @@ export const EditModal = ({
             {error && (
               <p
                 role="alert"
-                className="m-0 flex-1 font-mono text-[11px] uppercase tracking-[0.06em] text-red-500"
+                className="m-0 flex-1 font-mono text-[11px] uppercase tracking-[0.06em] text-danger"
               >
                 {error}
               </p>
