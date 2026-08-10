@@ -7,7 +7,7 @@ import {
   Loader2,
   Unplug,
 } from "lucide-react";
-import type { RepoConfig } from "@/shared/api";
+import { getBlobText, type RepoConfig } from "@/shared/api";
 import {
   adoptRemote,
   clearRepoConnection,
@@ -18,6 +18,7 @@ import {
   pushLocal,
   saveRepoConfig,
   validateVitaRepo,
+  type Conflict,
   type Resolution,
   type SyncPlan,
 } from "./repoSync";
@@ -46,6 +47,9 @@ export const RepoSyncCard = () => {
   const [notice, setNotice] = useState<string | null>(null);
   const [pendingPlan, setPendingPlan] = useState<{ plan: SyncPlan; mode: "fetch" | "push" } | null>(null);
   const [resolutions, setResolutions] = useState<Record<string, Resolution>>({});
+  const [previews, setPreviews] = useState<
+    Record<string, { mine: string | null; theirs: string | null } | "loading">
+  >({});
   const [message, setMessage] = useState("Update content from TABULARIUM");
   const [confirmAdopt, setConfirmAdopt] = useState(false);
   const [confirmDisconnect, setConfirmDisconnect] = useState(false);
@@ -152,6 +156,30 @@ export const RepoSyncCard = () => {
     setHasBase(false);
     setPendingPlan(null);
     setNotice("Disconnected. The local record stays as it is.");
+  };
+
+
+  const togglePreview = async (c: Conflict) => {
+    if (previews[c.path]) {
+      setPreviews((prev) => {
+        const next = { ...prev };
+        delete next[c.path];
+        return next;
+      });
+      return;
+    }
+    setPreviews((prev) => ({ ...prev, [c.path]: "loading" }));
+    const mine = pendingPlan?.plan.local[c.path]?.content ?? null;
+    let theirs: string | null = null;
+    const remoteSha = pendingPlan?.plan.remote[c.path];
+    if (remoteSha) {
+      try {
+        theirs = await getBlobText(cfg!, remoteSha);
+      } catch {
+        theirs = "(could not load the branch copy)";
+      }
+    }
+    setPreviews((prev) => ({ ...prev, [c.path]: { mine, theirs } }));
   };
 
   const allResolved =
@@ -292,6 +320,12 @@ export const RepoSyncCard = () => {
                       )}
                     </span>
                     <span className="flex gap-1">
+                      <button
+                        onClick={() => togglePreview(c)}
+                        className="rounded border border-line-strong px-2.5 py-1 text-xs font-medium text-muted transition-colors hover:text-signal"
+                      >
+                        {previews[c.path] ? "Hide" : "View"}
+                      </button>
                       {(["mine", "theirs"] as const).map((r) => (
                         <button
                           key={r}
@@ -306,6 +340,26 @@ export const RepoSyncCard = () => {
                         </button>
                       ))}
                     </span>
+                    {previews[c.path] === "loading" && (
+                      <p className="m-0 w-full text-xs text-muted">Loading the branch copy…</p>
+                    )}
+                    {previews[c.path] && previews[c.path] !== "loading" && (
+                      <div className="grid w-full grid-cols-2 gap-2">
+                        {(["mine", "theirs"] as const).map((side) => {
+                          const body = (previews[c.path] as { mine: string | null; theirs: string | null })[side];
+                          return (
+                            <div key={side} className="min-w-0">
+                              <p className="m-0 mb-1 text-xs font-medium text-muted">
+                                {side === "mine" ? "Mine" : "Theirs"}
+                              </p>
+                              <pre className="m-0 max-h-40 overflow-auto whitespace-pre-wrap rounded border border-line-strong bg-well p-2 text-xs text-ink">
+                                {body ?? "(deleted on this side)"}
+                              </pre>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -318,7 +372,7 @@ export const RepoSyncCard = () => {
                   Apply resolutions
                 </button>
                 <button
-                  onClick={() => setPendingPlan(null)}
+                  onClick={() => { setPendingPlan(null); setPreviews({}); }}
                   className="rounded-lg border border-line-strong px-4 py-2 text-sm font-medium text-muted hover:text-signal"
                 >
                   Cancel

@@ -5,6 +5,15 @@ Current project status. Read this before starting work. Format and rules: see
 
 ## Now
 
+- Aligned with the style's 2026-08-10 rulings: the rulebook refreshed and its hash now
+  pinned in CI, the docs audit and its Docs step adopted, the version pinned at 0.0.1,
+  the quotes rule checked by ESLint, doc-comment presence checked by the jsdoc plugin,
+  every workflow on latest stable action majors, and the vendor libraries split into
+  their own cached chunk (2026-08-10). The reasoning lives in the style's decision
+  records, 0013 through 0016 in Helm.
+- The conflict dialog now shows both versions side by side: a View toggle per file lazily
+  reads the branch copy and lays it beside the local one, so choosing no longer means
+  opening GitHub (2026-08-10).
 - CI greps every tracked byte for an em dash before anything installs, so the prose ban
   is checked rather than remembered (2026-08-08).
 - The style's test contract is adopted, and the suites already satisfied it. Suites mirror
@@ -39,16 +48,16 @@ Current project status. Read this before starting work. Format and rules: see
 ## Next
 
 - Exercise the repository connection end to end against the real deployment repo with a
-  fine-grained token (owner's hands: the token never leaves the browser) (2026-07-28).
+  fine-grained token; still pending, and only the owner's hands can run it because the
+  token never leaves the browser (2026-08-10).
 
 ## Deferred
 
 - Consider inverting the content bundle's dependencies so it takes the site identity and
   palette as arguments; that would let the repo sync and the zip export be two features
-  instead of one `publish` slice (2026-08-04).
+  instead of one `publish` slice (2026-08-10).
 - A diff preview inside the conflict dialog (today it names the file and the divergence
   kind; showing both versions side by side is the natural next step) (2026-07-28).
-- A house favicon of its own; the app currently reuses the shared pixel-mark (2026-07-28).
 
 ## Blocked
 

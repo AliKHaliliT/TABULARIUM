@@ -101,7 +101,7 @@ describe("siteHeadTags", () => {
   });
 
   it("escapes HTML-sensitive characters for raw splicing", () => {
-    expect(escapeHtml(`R&D <"lab">`)).toBe("R&amp;D &lt;&quot;lab&quot;&gt;");
+    expect(escapeHtml("R&D <\"lab\">")).toBe("R&amp;D &lt;&quot;lab&quot;&gt;");
   });
 });
 

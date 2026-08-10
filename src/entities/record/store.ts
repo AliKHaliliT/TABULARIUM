@@ -28,7 +28,7 @@ function warnIfSeedChanged(type: ContentType) {
     warnedStale.add(type);
     console.warn(
       `[personal-os] Bundled markdown for "${type}" changed since it was last ` +
-        `edited in the admin; the localStorage copy still wins. Clear ` +
+        "edited in the admin; the localStorage copy still wins. Clear " +
         `"${STORAGE_PREFIX}${type}" to re-seed from markdown.`
     );
   }
