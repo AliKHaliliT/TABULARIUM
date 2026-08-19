@@ -120,7 +120,7 @@ are computed in the browser (git's own `blob` hash via WebCrypto), so planning n
 downloads. Files only one side touched sync silently; files both sides touched surface in
 the UI as conflicts resolved per file (keep mine or take theirs), covering the
 edited-here-deleted-there cases too. Pushes go through the Git Data API as one atomic
-commit and never force: if the branch moves mid-push, GitHub rejects the ref update and
+commit and never force. If the branch moves mid-push, GitHub rejects the ref update and
 the user fetches first. Files under `src/content` that the panel does not model are
 invisible to sync and can never be deleted by a push. The first connect has no base, so
 the owner picks a direction explicitly: adopt the repository (replace the local record) or
@@ -131,7 +131,7 @@ push the local record wholesale.
 For the no-repo workflow, the export card serializes the same record to seed files (every
 item as markdown plus the three settings seeds, in the site repo's `src/content` layout)
 and packs them with `shared/lib/zip.ts`, a dependency-free STORE-method zip writer. The manual
-contract is unzip, diff, commit: the archive cannot delete files, so removals made in the
+contract is unzip, diff, commit. The archive cannot delete files, so removals made in the
 panel must be mirrored by hand, and it knows nothing about edits made in the repo since
 the record was last fetched.
 
