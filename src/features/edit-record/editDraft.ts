@@ -23,6 +23,7 @@ const DEFAULT_BY_TYPE: Record<string, EditDraft> = {
   awards:     { tags: [], body: "", title: "", issuer: "", awardType: "award" },
   projects:   { tags: [], body: "", title: "", status: undefined },
   books:      { tags: [], body: "", title: "", status: "To Read" },
+  media:      { tags: [], body: "", title: "", medium: "film", status: "To Watch" },
   courses:    { tags: [], body: "", title: "" },
   trips:      { tags: [], body: "", city: "" },
   countries:  { tags: [], body: "", name: "", visited: true },

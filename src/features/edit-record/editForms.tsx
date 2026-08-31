@@ -331,6 +331,40 @@ const BookFields = ({ draft, set }: FormProps) => (
   </>
 );
 
+const MediaFields = ({ draft, set }: FormProps) => (
+  <>
+    <Row>
+      <Field label="Title *" value={str(draft, "title")} onChange={(v) => set("title", v)} />
+      <Field label="Creator (director, studio, developer)" value={str(draft, "creator")} onChange={(v) => set("creator", v)} />
+    </Row>
+    <Row>
+      <Field
+        label="Medium (each value earns its own shelf)"
+        value={str(draft, "medium")}
+        onChange={(v) => set("medium", v)}
+        placeholder="film | series | anime | game | ..."
+      />
+      <Field
+        label="Status (an -ing label reads as in hand, a To label as queued)"
+        value={str(draft, "status")}
+        onChange={(v) => set("status", v)}
+        placeholder="Watched | Watching | To Watch | Played | ..."
+      />
+    </Row>
+    <TextAreaField label="Summary" value={str(draft, "desc")} onChange={(v) => set("desc", v)} />
+    <Field label="Image URL (poster or cover)" value={str(draft, "image")} onChange={(v) => set("image", v)} placeholder="https://..." withUploadIcon />
+    <Row>
+      <Field label="Rating (1–5)" value={str(draft, "rating")} onChange={(v) => set("rating", v)} />
+      <Field label="Link (official or store page)" value={str(draft, "link")} onChange={(v) => set("link", v)} placeholder="https://..." />
+    </Row>
+    <Row>
+      <Field label="Date (when taken in; orders the shelf)" type="date" value={str(draft, "date")} onChange={(v) => set("date", v)} />
+      <Field label="Story link (a blog/garden route with the long version, optional)" value={str(draft, "story")} onChange={(v) => set("story", v)} placeholder="/garden/on-that-game" />
+    </Row>
+    <RichBodyField label="Notes" minHeight="min-h-[300px]" value={str(draft, "body")} onChange={(v) => set("body", v)} />
+  </>
+);
+
 const CourseFields = ({ draft, set }: FormProps) => (
   <>
     <Row>
@@ -498,6 +532,8 @@ export const TypeFields = ({
       return <ProjectFields draft={draft} set={set} />;
     case "books":
       return <BookFields draft={draft} set={set} />;
+    case "media":
+      return <MediaFields draft={draft} set={set} />;
     case "courses":
       return <CourseFields draft={draft} set={set} />;
     case "trips":

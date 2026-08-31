@@ -19,6 +19,7 @@ import {
   Building2,
   Smile,
   Wrench,
+  Clapperboard,
 } from "lucide-react";
 import { cn } from "@/shared/lib";
 import type { AdminTab } from "@/features/edit-record";
@@ -68,6 +69,7 @@ const TAB_GROUPS = [
     label: "Life",
     tabs: [
       { id: "books",     label: "Books",     icon: BookOpen },
+      { id: "media",     label: "Media",     icon: Clapperboard },
       { id: "interests", label: "Interests", icon: Smile    },
       { id: "countries", label: "Countries", icon: Globe    },
       { id: "trips",     label: "Cities",    icon: MapPin   },

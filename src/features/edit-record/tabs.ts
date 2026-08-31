@@ -24,6 +24,7 @@ export type AdminTab =
   | "interests"
   | "projects"
   | "books"
+  | "media"
   | "courses"
   | "countries"
   | "trips"

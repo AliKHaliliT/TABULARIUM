@@ -10,6 +10,7 @@ const ALL_TYPES: ContentType[] = [
   "projects",
   "posts",
   "books",
+  "media",
   "trips",
   "countries",
   "courses",
@@ -106,6 +107,7 @@ const SORT_ORACLES: Array<[ContentType, (a: Loose, b: Loose) => number]> = [
   ["trips", byDateDesc("date")],
   ["posts", byDateDesc("date")],
   ["courses", byDateDesc("date")],
+  ["media", byDateDesc("date")],
 ];
 
 describe("loadInitialData: sorting", () => {

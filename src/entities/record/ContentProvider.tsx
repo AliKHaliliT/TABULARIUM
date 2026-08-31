@@ -9,6 +9,7 @@ import {
   UserSettings,
   Project,
   Book,
+  MediaItem,
   Trip,
   Country,
   Post,
@@ -45,6 +46,9 @@ export const ContentProvider = ({ children }: { children: ReactNode }) => {
   );
   const [books, setBooks] = useState<Book[]>(
     () => ContentService.getAll("books") as Book[]
+  );
+  const [media, setMedia] = useState<MediaItem[]>(
+    () => ContentService.getAll("media") as MediaItem[]
   );
   const [trips, setTrips] = useState<Trip[]>(
     () => ContentService.getAll("trips") as Trip[]
@@ -99,6 +103,7 @@ export const ContentProvider = ({ children }: { children: ReactNode }) => {
     setProjects(ContentService.getAll("projects") as Project[]);
     setPosts(ContentService.getAll("posts") as Post[]);
     setBooks(ContentService.getAll("books") as Book[]);
+    setMedia(ContentService.getAll("media") as MediaItem[]);
     setTrips(ContentService.getAll("trips") as Trip[]);
     setCountries(ContentService.getAll("countries") as Country[]);
     setBlog(ContentService.getAll("blog") as BlogPost[]);
@@ -139,6 +144,7 @@ export const ContentProvider = ({ children }: { children: ReactNode }) => {
         projects,
         posts,
         books,
+        media,
         trips,
         countries,
         blog,

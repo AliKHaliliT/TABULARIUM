@@ -13,6 +13,7 @@ import {
   UserSettings,
   Project,
   Book,
+  MediaItem,
   Trip,
   Country,
   Post,
@@ -36,6 +37,7 @@ export interface ContentContextValue {
   projects: Project[];
   posts: Post[];
   books: Book[];
+  media: MediaItem[];
   trips: Trip[];
   countries: Country[];
   blog: BlogPost[];

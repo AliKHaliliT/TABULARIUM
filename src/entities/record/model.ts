@@ -9,6 +9,7 @@ export type ContentType =
   | "projects"
   | "posts"
   | "books"
+  | "media"
   | "trips"
   | "countries"
   | "courses"
@@ -62,6 +63,22 @@ export interface Book extends BaseContent {
   status: "Reading" | "Read" | "To Read";
   rating?: number;
   notes?: string;
+}
+
+/** Anything else the library shelves: a film, a series, an anime, a game. */
+export interface MediaItem extends BaseContent {
+  type: "media";
+  title: string;
+  /** Which shelf this sits on. Common: film | series | anime | game; any label is valid and earns its own shelf on the site. */
+  medium: string;
+  /** The author-analog: a director, a studio, a developer. */
+  creator?: string;
+  /** Open like the medium. Common: Watched | Watching | To Watch, Played | Playing | To Play; the site reads the stage off the label's shape. */
+  status?: string;
+  rating?: number;
+  image?: string;
+  link?: string;
+  desc?: string;
 }
 
 /** A city visited, joined to its country by an exact name match. */
@@ -282,6 +299,7 @@ export interface UserSettings extends BaseContent {
 export type AnyContentItem =
   | Project
   | Book
+  | MediaItem
   | Trip
   | Country
   | Post

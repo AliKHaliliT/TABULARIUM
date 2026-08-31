@@ -48,7 +48,7 @@ The three apps talk through files rather than imports. Content markdown and the 
 
 ## How the panel works
 
-TABULARIUM is a CMS without a backend. It opens in the browser, seeds itself with the demo record, and stages every edit in localStorage, so editing works offline and nothing leaves the machine while you work. What you edit is not a private database format. The nineteen content types are Markdown files with YAML frontmatter, and the identity and palette are small JSON seeds, which is exactly what the site publishes.
+TABULARIUM is a CMS without a backend. It opens in the browser, seeds itself with the demo record, and stages every edit in localStorage, so editing works offline and nothing leaves the machine while you work. What you edit is not a private database format. The twenty content types are Markdown files with YAML frontmatter, and the identity and palette are small JSON seeds, which is exactly what the site publishes.
 
 Publishing is therefore just a matter of moving files, and the panel offers three ways to do it. The lightest is downloading a single seed after editing it. The middle path is a zip of the whole record, laid out in the site repo's `src/content` structure so it can be dropped straight in. The direct path connects the panel to the repository itself with a fine-grained token that grants contents access on that one repo and is stored only in your browser.
 
@@ -89,7 +89,7 @@ The annotated map of the whole system, including the layer rule and the sync eng
 
 ## Key Features
 
-- **Every ledger in one panel.** Grouped tabs mirror the site's map across System, Career, Writing, and Life, with create, edit, and delete for all nineteen content types, a rich-text editor, and open type fields that never gate what a record can hold.
+- **Every ledger in one panel.** Grouped tabs mirror the site's map across System, Career, Writing, and Life, with create, edit, and delete for all twenty content types, a rich-text editor, and open type fields that never gate what a record can hold.
 - **Site identity and palette editors.** Both preview live, five palette presets ship with the panel, and a shelf holds the custom palettes you design and save yourself.
 - **Three ways to publish.** You can download individual seed files, download the whole record as a zip laid out in the site repo's `src/content` structure, or connect the panel straight to your repository.
 - **A real repository connection.** The panel talks to GitHub from the browser with a fine-grained token and treats git as its backend. Connecting validates that the target really is a VITA, fetching and pushing run a per-file three-way merge, files changed on both sides come back as conflicts you resolve one by one, and pushes are atomic commits that never force.

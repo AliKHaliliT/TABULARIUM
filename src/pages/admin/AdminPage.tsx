@@ -29,6 +29,7 @@ const TAB_TO_CONTENT_TYPE: Record<
     organizations: "organizations",
     projects:      "projects",
     books:        "books",
+    media:        "media",
     courses:      "courses",
     trips:        "trips",
     countries:    "countries",
@@ -64,6 +65,7 @@ export const Admin = () => {
     projects,
     posts,
     books,
+    media,
     trips,
     countries,
     blog,
@@ -111,6 +113,8 @@ export const Admin = () => {
         return posts;
       case "books":
         return books;
+      case "media":
+        return media;
       case "trips":
         return trips;
       case "countries":
@@ -161,6 +165,7 @@ export const Admin = () => {
       subtitle: (item.organization ||
         item.role ||
         item.author ||
+        item.creator ||
         item.provider ||
         item.country ||
         item.excerpt ||
