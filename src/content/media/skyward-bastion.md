@@ -5,6 +5,8 @@ creator: Windward Software
 status: Playing
 image: https://picsum.photos/seed/skybastion/400/600
 date: "2026-02"
+tags:
+  - Strategy
 ---
 
-The second game on the shelf, giving the games shelf a mixed set of statuses: filter pills appear on a shelf page only once its entries carry more than one label.
+The second game on the shelf, giving the games shelf a mixed set of statuses: filter pills appear on a shelf page only once its entries carry more than one label. Its tags feed the command-palette search the way every other entry's do.
