@@ -6,7 +6,7 @@
 
 import { ContentService, markdownFileName, toMarkdownFile } from "@/entities/record";
 import { PORTFOLIO_CONTENT_TYPES, type PortfolioContentType } from "./contract";
-import { currentSite, toSiteSeedFileJson as siteJson, loadStoredPalette, SEED_PALETTE, toPaletteSeedFileJson as paletteJson } from "@/entities/site";
+import { currentSite, toSiteSeedFileJson as siteJson, loadStoredPalette, SEED_PALETTE, toPaletteSeedFileJson as paletteJson, currentOrdering, toOrderingSeedFileJson as orderingJson } from "@/entities/site";
 import type { ZipEntry } from "@/shared/lib";
 
 /** Folder for each type inside src/content, mirroring the site repo. */
@@ -63,6 +63,10 @@ export function buildContentEntries(): ZipEntry[] {
   entries.push({
     path: "src/content/settings/palette.json",
     content: paletteJson(loadStoredPalette() ?? SEED_PALETTE),
+  });
+  entries.push({
+    path: "src/content/settings/ordering.json",
+    content: orderingJson(currentOrdering()),
   });
 
   return entries;

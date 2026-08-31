@@ -36,6 +36,8 @@ export interface BaseContent {
   tags?: string[];
   date?: string;
   story?: string; // route of the long-form piece about this item (/blog/... or /garden/...)
+  /** Pinned entries lead their section on the site, ascending, in previews and full pages alike. */
+  pin?: number;
 }
 
 /** A piece of work, with the year and role that place it. */

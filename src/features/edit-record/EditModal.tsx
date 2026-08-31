@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { formatDateForInput, useScrollLock } from "@/shared/lib";
 import { AnyContentItem } from "@/entities/record";
 import { AdminTab } from "./tabs";
-import { EditDraft } from "./editDraft";
+import { EditDraft, str } from "./editDraft";
+import { Field } from "./editFields";
 import { TypeFields } from "./editForms";
 
 interface EditModalProps {
@@ -24,6 +25,7 @@ const MODAL_TITLES: Record<string, string> = {
   awards:     "Award",
   projects:   "Project",
   books:      "Book",
+  media:      "Media Entry",
   courses:    "Course",
   trips:      "City",
   countries:  "Country",
@@ -104,7 +106,13 @@ export const EditModal = ({
       return;
     }
     setError(null);
-    onSave(formData as unknown as AnyContentItem);
+    // The pin travels as a number or not at all; blank or unusable unpins.
+    const pin = Number(formData.pin);
+    const normalized = {
+      ...formData,
+      pin: formData.pin == null || formData.pin === "" || Number.isNaN(pin) ? undefined : pin,
+    };
+    onSave(normalized as unknown as AnyContentItem);
     onClose();
   };
 
@@ -147,6 +155,14 @@ export const EditModal = ({
 
           <div className="p-6 space-y-6 overflow-y-auto flex-1 custom-scrollbar">
             <TypeFields type={type} draft={formData} set={set} />
+            {/* Every collection shares the pin: pinned entries lead their
+                section on the site, ascending, so it lives here once rather
+                than in nineteen forms. */}
+            <Field
+              label="Pin (1 leads its section, then 2, 3, ...; empty means unpinned)"
+              value={str(formData, "pin")}
+              onChange={(v) => set("pin", v)}
+            />
           </div>
 
           <div className="p-6 border-t border-line flex items-center justify-end gap-4 bg-card rounded-b-card">
