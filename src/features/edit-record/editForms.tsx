@@ -49,6 +49,7 @@ const ExperienceFields = ({ draft, set }: FormProps) => (
       <Field label="End Date (leave blank for Present)" type="month" value={str(draft, "endDate")} onChange={(v) => set("endDate", v)} />
     </Row>
     <Field label="Company Website" value={str(draft, "link")} onChange={(v) => set("link", v)} placeholder="https://..." />
+    <TextAreaField label="Summary (one line for previews; the body's first line stands in when empty)" value={str(draft, "desc")} onChange={(v) => set("desc", v)} />
     <TagsField tags={draft.tags || []} onChange={(t) => set("tags", t)} />
     <RichBodyField label="Responsibilities & Achievements" minHeight="min-h-[300px]" value={str(draft, "body")} onChange={(v) => set("body", v)} />
   </>
