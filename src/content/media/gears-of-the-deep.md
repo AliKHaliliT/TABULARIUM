@@ -4,7 +4,7 @@ medium: game
 creator: Tinker's Forge Interactive
 status: Played
 rating: 4
-image: https://picsum.photos/seed/gearsdeep/400/600
+image: https://picsum.photos/seed/drownedforge/400/600
 date: "2025-08"
 desc: A dredging expedition through the flooded gearworks beneath Cinderfen.
 story: /garden/on-demo-content
