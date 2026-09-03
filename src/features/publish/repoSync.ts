@@ -78,7 +78,7 @@ export function loadRepoConfig(): RepoConfig | null {
 /**
  * Stores a repository connection for this browser.
  *
- * @param config - The repository coordinates and the token to authorize with.
+  * @param cfg - The repository coordinates and the token to authorize with.
  *
  * @returns Nothing.
  */

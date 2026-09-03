@@ -46,6 +46,35 @@ One page. `src/app/App.tsx` composes the providers and the chrome around
 Career, Writing, Life), per-type content tables with create, edit, and delete, and the
 special-cased Site, Profile, Skills, and Appearance tabs. There is no router and no server.
 
+```text
+tabularium/
+├── AGENTS.md                   # Agent entry point and the documentation index
+├── index.html                  # The single page; mounts src/app/main.tsx
+├── vite.config.ts              # Build, the @ -> src alias, and Vitest configuration
+├── eslint.config.js            # Flat ESLint configuration; carries the layer and token rules
+├── tsconfig.json               # Solution file referencing the app and node configs
+├── tsconfig.app.json           # Compiler options for the browser bundle under src/
+├── tsconfig.node.json          # Compiler options for the build tooling (vite.config.ts)
+│
+├── scripts/                    # Tracked repository tooling
+│   └── audit-docs.mjs          # The docs audit; the gate's Docs command
+│
+├── docs/                       # Technical documentation (indexed in AGENTS.md)
+│
+├── src/
+│   ├── app/                    # Composition root: bootstrap, providers, chrome, tokens
+│   ├── pages/                  # The one page: the tab strip and the settings surfaces
+│   ├── features/               # edit-record, edit-settings, appearance, site-identity, ordering, publish
+│   ├── entities/
+│   │   ├── record/             # Content model, both doors, the collections
+│   │   └── site/               # Identity, palette, page copy, section ordering
+│   ├── shared/                 # api, config, lib, ui, testing
+│   └── content/                # The demo record this panel edits
+│
+└── tests/                      # Vitest suites mirroring the src structure
+    └── src/
+```
+
 ## Data flow
 
 ```text
@@ -149,3 +178,15 @@ The 6 suites here are characterization tests over the content loader, the publis
 mocking at all, which is what made adopting the rule a description of existing practice rather
 than a migration. The reasoning is recorded in
 [decision 0010](decisions/0010-adopt-the-styles-test-contract.md), and the rule itself is owned by the style.
+
+## Exemplars
+
+The map says where things live; these files say how they read. An artifact of a kind listed
+here is cut from its exemplar and rewritten, never written fresh from the rule, because the
+rule names what must exist and only these bytes carry the dialect.
+
+- An entity slice with both doors: `src/entities/record/model.ts`, `seed.ts`, and `store.ts`.
+- A settings feature with a browser draft and a seed download: `src/features/ordering/`.
+- The network door: `src/shared/api/github.ts`.
+- A publish suite: `tests/src/features/publish/snapshot.test.ts`.
+- A decision record: `docs/decisions/0014-edit-the-pin-and-the-section-order.md`.

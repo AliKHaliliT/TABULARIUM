@@ -55,7 +55,7 @@ async function api<T>(cfg: RepoConfig, path: string, init?: RequestInit): Promis
 /**
  * Reads where a branch currently points.
  *
- * @param config - The repository and the token to authorize with.
+  * @param cfg - The repository and the token to authorize with.
  *
  * @returns The branch head, which every sync plan uses as its "theirs" side.
  *
@@ -91,7 +91,7 @@ export async function getTreeFiles(
 /**
  * Reads one blob's contents.
  *
- * @param config - The repository and the token to authorize with.
+  * @param cfg - The repository and the token to authorize with.
  * @param sha - The blob hash to read.
  *
  * @returns The decoded text.
