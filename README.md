@@ -12,7 +12,7 @@
 
 TABULARIUM is the admin panel of the [VITA](https://github.com/AliKHaliliT/VITA) ecosystem. The Tabularium was Rome's hall of records, and this app plays the same part for a VITA record. It is the one place where every ledger gets written, from content and profile to skills, site identity, and palette, and it is the source of every file the sister apps consume.
 
-The panel is built with React and Vite as a single page with no server. Everything you edit stays in your browser until you choose to publish it. The repository's documentation and engineering conventions follow [My-Styles](https://github.com/AliKHaliliT/My-Styles), aligned to its commit `4238623`.
+The panel is built with React and Vite as a single page with no server. Everything you edit stays in your browser until you choose to publish it. The repository's documentation and engineering conventions follow [My-Styles](https://github.com/AliKHaliliT/My-Styles), aligned to its commit `2e7a95a`.
 
 ---
 
