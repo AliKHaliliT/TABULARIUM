@@ -4,7 +4,7 @@
 
 import { ReactNode } from "react";
 import { Upload } from "lucide-react";
-import { TagInput, RichTextEditor } from "@/shared/ui";
+import { MonthField, TagInput, RichTextEditor } from "@/shared/ui";
 
 const INPUT_CLS =
   "w-full px-3 py-2 bg-well border border-line rounded-lg text-sm text-ink";
@@ -16,7 +16,7 @@ export const Row = ({ children }: { children: ReactNode }) => (
   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">{children}</div>
 );
 
-/** A labelled single-line input. */
+/** A labelled single-line input, or the month chooser where the type asks for one. */
 export const Field = ({
   label,
   value,
@@ -34,7 +34,11 @@ export const Field = ({
 }) => (
   <div className="space-y-2">
     <label className={LABEL_CLS}>{label}</label>
-    {withUploadIcon ? (
+    {type === "month" ? (
+      // A month is picked from two lists rather than the platform control, whose
+      // year sits in one scrolling popup the page can neither style nor size.
+      <MonthField label={label} value={value} onChange={onChange} />
+    ) : withUploadIcon ? (
       <div className="relative">
         <Upload
           size={16}

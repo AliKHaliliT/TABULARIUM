@@ -1,5 +1,7 @@
 export { downloadBlobFile, downloadTextFile } from "./download";
 export { LINK_ICONS, LINK_ICON_NAMES } from "./linkIcons";
+export type { MonthParts } from "./monthValue";
+export { MONTH_NAMES, joinMonthValue, splitMonthValue, yearChoices } from "./monthValue";
 export { isMacLike, searchShortcutLabel } from "./platform";
 export { safeSetItem } from "./storage";
 export type { ProfileLink } from "./text";
