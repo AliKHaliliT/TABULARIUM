@@ -36,20 +36,28 @@ async function api<T>(cfg: RepoConfig, path: string, init?: RequestInit): Promis
       ...init?.headers,
     },
   });
-  if (!res.ok) {
-    let detail = "";
-    try {
-      detail = ((await res.json()) as { message?: string }).message ?? "";
-    } catch {
-      // a non-JSON error body adds nothing
-    }
-    if (res.status === 401) throw new Error("GitHub rejected the token. Check it (and its expiry).");
-    if (res.status === 403) throw new Error(`GitHub refused: ${detail || "the token lacks access to this repository"}.`);
-    if (res.status === 404) throw new Error("Repository or branch not found (private repos need the token to grant Contents access).");
-    if (res.status === 409 || res.status === 422) throw new Error(detail || "The repository changed underneath the request.");
-    throw new Error(`GitHub error ${res.status}: ${detail || res.statusText}`);
-  }
+  if (!res.ok) throw refusal(res, await readDetail(res));
   return res.json() as Promise<T>;
+}
+
+// The message GitHub's error body carries, or nothing.
+async function readDetail(res: Response): Promise<string> {
+  let detail = "";
+  try {
+    detail = ((await res.json()) as { message?: string }).message ?? "";
+  } catch {
+    // a non-JSON error body adds nothing
+  }
+  return detail;
+}
+
+// The error a refused request raises, worded by its status.
+function refusal(res: Response, detail: string): Error {
+  if (res.status === 401) return new Error("GitHub rejected the token. Check it (and its expiry).");
+  if (res.status === 403) return new Error(`GitHub refused: ${detail || "the token lacks access to this repository"}.`);
+  if (res.status === 404) return new Error("Repository or branch not found (private repos need the token to grant Contents access).");
+  if (res.status === 409 || res.status === 422) return new Error(detail || "The repository changed underneath the request.");
+  return new Error(`GitHub error ${res.status}: ${detail || res.statusText}`);
 }
 
 /**

@@ -3,6 +3,10 @@ import { UserSettings } from "@/entities/record";
 import { LinksEditor } from "./LinksEditor";
 import { useSettingsForm } from "./useSettingsForm";
 
+// Read a profile field as an input value, empty when unset.
+const str = (formData: UserSettings, field: keyof UserSettings): string =>
+  (formData[field] as string | undefined) || "";
+
 /** Who you are: identity, contact, links, and languages. Skills live in
  *  their own tab; site-level identity lives under Settings. */
 export const ProfileTab = () => {
@@ -17,7 +21,7 @@ export const ProfileTab = () => {
           </label>
           <input
             type="text"
-            value={formData.name || ""}
+            value={str(formData, "name")}
             onChange={(e) => handleChange("name", e.target.value)}
             className="w-full px-3 py-2 bg-well border border-line rounded-lg text-sm text-ink"
           />
@@ -28,7 +32,7 @@ export const ProfileTab = () => {
           </label>
           <input
             type="text"
-            value={formData.role || ""}
+            value={str(formData, "role")}
             onChange={(e) => handleChange("role", e.target.value)}
             className="w-full px-3 py-2 bg-well border border-line rounded-lg text-sm text-ink"
           />
@@ -39,7 +43,7 @@ export const ProfileTab = () => {
           </label>
           <input
             type="text"
-            value={formData.location || ""}
+            value={str(formData, "location")}
             onChange={(e) => handleChange("location", e.target.value)}
             className="w-full px-3 py-2 bg-well border border-line rounded-lg text-sm text-ink"
           />
@@ -50,7 +54,7 @@ export const ProfileTab = () => {
           </label>
           <input
             type="text"
-            value={formData.focus || ""}
+            value={str(formData, "focus")}
             onChange={(e) => handleChange("focus", e.target.value)}
             className="w-full px-3 py-2 bg-well border border-line rounded-lg text-sm text-ink"
           />
@@ -72,7 +76,7 @@ export const ProfileTab = () => {
           </label>
           <input
             type="text"
-            value={formData.nationality || ""}
+            value={str(formData, "nationality")}
             onChange={(e) => handleChange("nationality", e.target.value)}
             placeholder="Canadian"
             className="w-full px-3 py-2 bg-well border border-line rounded-lg text-sm text-ink"
@@ -84,7 +88,7 @@ export const ProfileTab = () => {
           </label>
           <input
             type="date"
-            value={formData.dateOfBirth || ""}
+            value={str(formData, "dateOfBirth")}
             onChange={(e) => handleChange("dateOfBirth", e.target.value)}
             className="w-full px-3 py-2 bg-well border border-line rounded-lg text-sm text-ink"
           />
@@ -100,7 +104,7 @@ export const ProfileTab = () => {
           </label>
           <input
             type="text"
-            value={formData.availability || ""}
+            value={str(formData, "availability")}
             onChange={(e) => handleChange("availability", e.target.value)}
             placeholder="Open to opportunities from September 2025"
             className="w-full px-3 py-2 bg-well border border-line rounded-lg text-sm text-ink"
@@ -112,7 +116,7 @@ export const ProfileTab = () => {
           </label>
           <input
             type="text"
-            value={formData.workMode || ""}
+            value={str(formData, "workMode")}
             onChange={(e) => handleChange("workMode", e.target.value)}
             placeholder="Remote · Hybrid · On-site"
             className="w-full px-3 py-2 bg-well border border-line rounded-lg text-sm text-ink"
@@ -136,7 +140,7 @@ export const ProfileTab = () => {
           )}
           <input
             type="text"
-            value={formData.avatar || ""}
+            value={str(formData, "avatar")}
             onChange={(e) => handleChange("avatar", e.target.value)}
             placeholder="https://..."
             className="flex-1 px-3 py-2 bg-well border border-line rounded-lg text-sm text-ink"
@@ -186,7 +190,7 @@ export const ProfileTab = () => {
             so add only what you want the world to see.
           </p>
           <LinksEditor
-            value={formData.links || ""}
+            value={str(formData, "links")}
             onChange={(v) => handleChange("links", v)}
           />
         </div>
@@ -202,7 +206,7 @@ export const ProfileTab = () => {
         </div>
         <textarea
           rows={4}
-          value={formData.languages || ""}
+          value={str(formData, "languages")}
           onChange={(e) => handleChange("languages", e.target.value)}
           placeholder={"English: Native\nFarsi: Native\nFrench: Conversational"}
           className="w-full px-3 py-2 bg-well border border-line rounded-lg text-sm text-ink font-mono resize-none"
@@ -219,7 +223,7 @@ export const ProfileTab = () => {
         </div>
         <textarea
           rows={3}
-          value={formData.declaration || ""}
+          value={str(formData, "declaration")}
           onChange={(e) => handleChange("declaration", e.target.value)}
           placeholder="I hereby declare that..."
           className="w-full px-3 py-2 bg-well border border-line rounded-lg text-sm text-ink resize-none"
@@ -237,7 +241,7 @@ export const ProfileTab = () => {
         </div>
         <textarea
           rows={4}
-          value={formData.now || ""}
+          value={str(formData, "now")}
           onChange={(e) => handleChange("now", e.target.value)}
           placeholder="Currently building..."
           className="w-full px-3 py-2 bg-well border border-line rounded-lg text-sm text-ink resize-none"

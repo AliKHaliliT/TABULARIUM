@@ -2,6 +2,7 @@
 // editFields primitives. Labels, placeholders, options, and rich-editor
 // heights are unchanged from the original inline markup.
 
+import type { ComponentType } from "react";
 import { AdminTab } from "./tabs";
 import { EditDraft, SetField, str } from "./editDraft";
 import {
@@ -502,53 +503,36 @@ const UpdateFields = ({ draft, set }: FormProps) => (
   </>
 );
 
+const FIELDS_BY_TAB: Partial<Record<AdminTab, ComponentType<FormProps>>> = {
+  experience: ExperienceFields,
+  education: EducationFields,
+  awards: AwardFields,
+  publications: PublicationFields,
+  speaking: SpeakingFields,
+  volunteering: VolunteeringFields,
+  certificates: CertificateFields,
+  references: ReferenceFields,
+  interests: InterestFields,
+  organizations: OrganizationFields,
+  projects: ProjectFields,
+  books: BookFields,
+  media: MediaFields,
+  courses: CourseFields,
+  trips: TripFields,
+  countries: CountryFields,
+  posts: PostFields,
+  blog: BlogFields,
+  updates: UpdateFields,
+};
+
 /** Dispatch to the right field group for a tab. */
 export const TypeFields = ({
   type,
   draft,
   set,
 }: FormProps & { type: AdminTab }) => {
-  switch (type) {
-    case "experience":
-      return <ExperienceFields draft={draft} set={set} />;
-    case "education":
-      return <EducationFields draft={draft} set={set} />;
-    case "awards":
-      return <AwardFields draft={draft} set={set} />;
-    case "publications":
-      return <PublicationFields draft={draft} set={set} />;
-    case "speaking":
-      return <SpeakingFields draft={draft} set={set} />;
-    case "volunteering":
-      return <VolunteeringFields draft={draft} set={set} />;
-    case "certificates":
-      return <CertificateFields draft={draft} set={set} />;
-    case "references":
-      return <ReferenceFields draft={draft} set={set} />;
-    case "interests":
-      return <InterestFields draft={draft} set={set} />;
-    case "organizations":
-      return <OrganizationFields draft={draft} set={set} />;
-    case "projects":
-      return <ProjectFields draft={draft} set={set} />;
-    case "books":
-      return <BookFields draft={draft} set={set} />;
-    case "media":
-      return <MediaFields draft={draft} set={set} />;
-    case "courses":
-      return <CourseFields draft={draft} set={set} />;
-    case "trips":
-      return <TripFields draft={draft} set={set} />;
-    case "countries":
-      return <CountryFields draft={draft} set={set} />;
-    case "posts":
-      return <PostFields draft={draft} set={set} />;
-    case "blog":
-      return <BlogFields draft={draft} set={set} />;
-    case "updates":
-      return <UpdateFields draft={draft} set={set} />;
-    default:
-      // Non-content tabs (settings/documents/appearance) never open EditModal.
-      return null;
-  }
+  const Fields = FIELDS_BY_TAB[type];
+  // Non-content tabs (settings/documents/appearance) never open EditModal.
+  if (!Fields) return null;
+  return <Fields draft={draft} set={set} />;
 };

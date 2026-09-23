@@ -143,6 +143,10 @@ const SORT_SPECS: Partial<
   media: { field: "date", kind: "date" },
 };
 
+// The filename-derived slug of a seed file.
+const fileSlug = (path: string): string =>
+  path.split("/").pop()?.replace(".md", "") || "";
+
 /**
  * Reads one collection out of the bundled markdown.
  *
@@ -166,7 +170,7 @@ export function loadInitialData(type: ContentType): AnyContentItem[] {
     ([path, content]) => {
       const raw = String(content);
       const { attributes, body } = frontMatter<Frontmatter>(raw);
-      const slug = path.split("/").pop()?.replace(".md", "") || "";
+      const slug = fileSlug(path);
 
       const item = {
         id: attributes.id || slug,

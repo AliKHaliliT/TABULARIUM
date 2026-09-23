@@ -150,28 +150,34 @@ export function toMarkdownFile(source: AnyContentItem | UserSettings): string {
       item[key] !== undefined &&
       item[key] !== ""
     ) {
-      const value = item[key];
-      if (Array.isArray(value)) {
-        fileContent += `${key}:\n`;
-        value.forEach((v) => (fileContent += `  - ${v}\n`));
-      } else if (typeof value === "string" && value.includes("\n")) {
-        // Multi-line values (skills, languages, links) round-trip as YAML
-        // block scalars, matching the hand-written seed files.
-        fileContent += `${key}: |\n`;
-        value.split("\n").forEach((line) => (fileContent += `  ${line}\n`));
-      } else {
-        const safeValue =
-          typeof value === "string" && value.includes(":")
-            ? `"${value}"`
-            : value;
-        fileContent += `${key}: ${safeValue}\n`;
-      }
+      fileContent += frontmatterField(key, item[key]);
     }
   });
   fileContent += "---\n\n";
   fileContent += item.body || "";
   if (!String(item.body || "").endsWith("\n")) fileContent += "\n";
   return fileContent;
+}
+
+// The frontmatter lines one set field serializes to.
+function frontmatterField(key: string, value: unknown): string {
+  let lines = "";
+  if (Array.isArray(value)) {
+    lines += `${key}:\n`;
+    value.forEach((v) => (lines += `  - ${v}\n`));
+  } else if (typeof value === "string" && value.includes("\n")) {
+    // Multi-line values (skills, languages, links) round-trip as YAML
+    // block scalars, matching the hand-written seed files.
+    lines += `${key}: |\n`;
+    value.split("\n").forEach((line) => (lines += `  ${line}\n`));
+  } else {
+    const safeValue =
+      typeof value === "string" && value.includes(":")
+        ? `"${value}"`
+        : value;
+    lines += `${key}: ${safeValue}\n`;
+  }
+  return lines;
 }
 
 /** The seed filename an item serializes to (slug when it has one, else a

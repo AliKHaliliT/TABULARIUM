@@ -167,6 +167,15 @@ export async function planSync(
   }
 
   const base = opts.assumeBase === "remote" ? remote : (loadRepoState()?.files ?? {});
+  return { head, remote, local, base, ...classifyPaths(remote, local, base) };
+}
+
+/** Sort each known path by which side moved it since the base. */
+function classifyPaths(
+  remote: SyncPlan["remote"],
+  local: SyncPlan["local"],
+  base: SyncPlan["base"]
+): Pick<SyncPlan, "conflicts" | "remoteChanges" | "localChanges" | "localDeletions"> {
   const conflicts: Conflict[] = [];
   const remoteChanges: string[] = [];
   const localChanges: string[] = [];
@@ -189,12 +198,16 @@ export async function planSync(
       // both moved, to different results
       conflicts.push({
         path,
-        kind: !l ? "local-delete" : !r ? "remote-delete" : "edit",
+        kind: conflictKind(l, r),
       });
     }
   }
 
-  return { head, remote, local, base, conflicts, remoteChanges, localChanges, localDeletions };
+  return { conflicts, remoteChanges, localChanges, localDeletions };
+}
+
+function conflictKind(l: string | undefined, r: string | undefined): Conflict["kind"] {
+  return !l ? "local-delete" : !r ? "remote-delete" : "edit";
 }
 
 // --- applying the remote side (fetch) -----------------------------------------
@@ -228,6 +241,37 @@ function parseSeedFile(type: PortfolioContentType, path: string, raw: string): A
   } as unknown as AnyContentItem;
 }
 
+/** Where each settings seed goes once its text is fetched. */
+const SETTINGS_STORES = new Map<string, (text: string) => void>([
+  [
+    "src/content/settings/site.json",
+    (text) => {
+      const parsed: unknown = JSON.parse(text);
+      if (isSiteIdentity(parsed)) saveStoredSite(parsed);
+    },
+  ],
+  [
+    "src/content/settings/palette.json",
+    (text) => {
+      const palette = JSON.parse(text) as StoredPalette;
+      saveStoredPalette(palette);
+      applyPalette(palette);
+    },
+  ],
+  [
+    "src/content/settings/profile.md",
+    (text) => {
+      const { attributes, body } = frontMatter<Record<string, unknown>>(text);
+      ContentService.saveSettings({
+        id: "profile",
+        type: "settings",
+        ...attributes,
+        body: body.replace(/\n$/, "") || "",
+      } as unknown as UserSettings);
+    },
+  ],
+]);
+
 /** Pull the given remote paths into localStorage: content items are replaced
  *  per file inside their type collection; the three settings seeds route to
  *  their own stores. */
@@ -237,28 +281,9 @@ async function applyRemotePaths(cfg: RepoConfig, plan: SyncPlan, paths: string[]
 
   for (const path of paths) {
     const sha = plan.remote[path];
-    if (path === "src/content/settings/site.json") {
-      if (!sha) continue;
-      const parsed: unknown = JSON.parse(await getBlobText(cfg, sha));
-      if (isSiteIdentity(parsed)) saveStoredSite(parsed);
-      continue;
-    }
-    if (path === "src/content/settings/palette.json") {
-      if (!sha) continue;
-      const palette = JSON.parse(await getBlobText(cfg, sha)) as StoredPalette;
-      saveStoredPalette(palette);
-      applyPalette(palette);
-      continue;
-    }
-    if (path === "src/content/settings/profile.md") {
-      if (!sha) continue;
-      const { attributes, body } = frontMatter<Record<string, unknown>>(await getBlobText(cfg, sha));
-      ContentService.saveSettings({
-        id: "profile",
-        type: "settings",
-        ...attributes,
-        body: body.replace(/\n$/, "") || "",
-      } as unknown as UserSettings);
+    const storeSettings = SETTINGS_STORES.get(path);
+    if (storeSettings) {
+      if (sha) storeSettings(await getBlobText(cfg, sha));
       continue;
     }
     const type = typeForPath(path);
@@ -267,20 +292,22 @@ async function applyRemotePaths(cfg: RepoConfig, plan: SyncPlan, paths: string[]
     byType.get(type)!.set(path, sha ? parseSeedFile(type, path, await getBlobText(cfg, sha)) : null);
   }
 
-  for (const [type, changes] of byType) {
-    // Rebuild the collection: current items keyed by the seed path they
-    // serialize to, then the fetched replacements and deletions overlay them.
-    const dir = `${CONTENT_PREFIX}${TYPE_DIRS[type]}/`;
-    const current = new Map<string, AnyContentItem>();
-    for (const item of ContentService.getAll(type)) {
-      current.set(`${dir}${markdownFileName(item)}`, item);
-    }
-    for (const [path, item] of changes) {
-      if (item === null) current.delete(path);
-      else current.set(path, item);
-    }
-    ContentService.save(type, [...current.values()]);
+  for (const [type, changes] of byType) rebuildCollection(type, changes);
+}
+
+function rebuildCollection(type: PortfolioContentType, changes: Map<string, AnyContentItem | null>): void {
+  // Rebuild the collection from its current items, keyed by the seed path each
+  // serializes to, and lay the fetched replacements and deletions over them.
+  const dir = `${CONTENT_PREFIX}${TYPE_DIRS[type]}/`;
+  const current = new Map<string, AnyContentItem>();
+  for (const item of ContentService.getAll(type)) {
+    current.set(`${dir}${markdownFileName(item)}`, item);
   }
+  for (const [path, item] of changes) {
+    if (item === null) current.delete(path);
+    else current.set(path, item);
+  }
+  ContentService.save(type, [...current.values()]);
 }
 
 // --- public operations ---------------------------------------------------------
@@ -348,20 +375,7 @@ export async function pushLocal(
   resolutions: Record<string, Resolution>,
   message: string
 ): Promise<SyncResult> {
-  const changes: { path: string; content: string }[] = [];
-  const deletions: string[] = [];
-  const takeTheirs: string[] = [];
-
-  for (const path of plan.localChanges) changes.push({ path, content: plan.local[path].content });
-  for (const path of plan.localDeletions) deletions.push(path);
-  for (const c of plan.conflicts) {
-    if (resolutions[c.path] === "mine") {
-      if (plan.local[c.path]) changes.push({ path: c.path, content: plan.local[c.path].content });
-      else deletions.push(c.path);
-    } else {
-      takeTheirs.push(c.path);
-    }
-  }
+  const { changes, deletions, takeTheirs } = splitForPush(plan, resolutions);
 
   let pushedSha = plan.head.commitSha;
   if (changes.length || deletions.length) {
@@ -387,4 +401,24 @@ export async function pushLocal(
   saveRepoState({ headSha: pushedSha, files, fetchedAt: new Date().toISOString() });
 
   return { applied: takeTheirs.length, pushedSha };
+}
+
+/** What a push commits, and the conflicts it takes from the branch instead. */
+function splitForPush(plan: SyncPlan, resolutions: Record<string, Resolution>) {
+  const changes: { path: string; content: string }[] = [];
+  const deletions: string[] = [];
+  const takeTheirs: string[] = [];
+
+  for (const path of plan.localChanges) changes.push({ path, content: plan.local[path].content });
+  for (const path of plan.localDeletions) deletions.push(path);
+  for (const c of plan.conflicts) {
+    if (resolutions[c.path] === "mine") {
+      if (plan.local[c.path]) changes.push({ path: c.path, content: plan.local[c.path].content });
+      else deletions.push(c.path);
+    } else {
+      takeTheirs.push(c.path);
+    }
+  }
+
+  return { changes, deletions, takeTheirs };
 }

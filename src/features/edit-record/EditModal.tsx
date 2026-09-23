@@ -42,6 +42,22 @@ const MODAL_TITLES: Record<string, string> = {
   settings:      "Settings",
 };
 
+// What the draft was last seeded from.
+interface DraftSeed {
+  data: EditModalProps["data"];
+  isOpen: boolean;
+  type: AdminTab;
+}
+
+const seedChanged = (seed: DraftSeed | null, next: DraftSeed) =>
+  !seed || seed.data !== next.data || seed.isOpen !== next.isOpen || seed.type !== next.type;
+
+// The pin travels as a number or not at all; blank or unusable unpins.
+const normalizePin = (raw: unknown): number | undefined => {
+  const pin = Number(raw);
+  return raw == null || raw === "" || Number.isNaN(pin) ? undefined : pin;
+};
+
 /** The editor for one record item, showing the fields its collection defines. */
 export const EditModal = ({
   isOpen,
@@ -56,12 +72,8 @@ export const EditModal = ({
 
   // Re-seed the draft whenever the edited item, tab, or open state changes
   // (render-time adjustment: react.dev/learn/you-might-not-need-an-effect).
-  const [seed, setSeed] = useState<{
-    data: EditModalProps["data"];
-    isOpen: boolean;
-    type: AdminTab;
-  } | null>(null);
-  if (!seed || seed.data !== data || seed.isOpen !== isOpen || seed.type !== type) {
+  const [seed, setSeed] = useState<DraftSeed | null>(null);
+  if (seedChanged(seed, { data, isOpen, type })) {
     setSeed({ data, isOpen, type });
     setError(null);
     if (data) {
@@ -106,11 +118,9 @@ export const EditModal = ({
       return;
     }
     setError(null);
-    // The pin travels as a number or not at all; blank or unusable unpins.
-    const pin = Number(formData.pin);
     const normalized = {
       ...formData,
-      pin: formData.pin == null || formData.pin === "" || Number.isNaN(pin) ? undefined : pin,
+      pin: normalizePin(formData.pin),
     };
     onSave(normalized as unknown as AnyContentItem);
     onClose();

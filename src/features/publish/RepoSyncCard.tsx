@@ -6,6 +6,7 @@ import {
   Link2,
   Loader2,
   Unplug,
+  type LucideIcon,
 } from "lucide-react";
 import { getBlobText, type RepoConfig } from "@/shared/api";
 import {
@@ -31,6 +32,12 @@ const inputCls =
   "w-full rounded-lg border border-line bg-well px-3 py-2 text-sm text-ink outline-none focus:border-signal";
 
 const fileLabel = (path: string) => path.replace(/^src\/content\//, "");
+
+const baseLabel = (hasBase: boolean) =>
+  hasBase ? `base: ${loadRepoState()?.fetchedAt.slice(0, 16).replace("T", " ") ?? ""}` : "no sync yet";
+
+const busyIcon = (busy: Busy, kind: NonNullable<Busy>, Icon: LucideIcon) =>
+  busy === kind ? <Loader2 size={15} className="animate-spin" /> : <Icon size={15} />;
 
 /**
  * The repository connection: git as the panel's backend. Fetch and push run a
@@ -186,6 +193,9 @@ export const RepoSyncCard = () => {
     pendingPlan !== null &&
     pendingPlan.plan.conflicts.every((c) => resolutions[c.path] !== undefined);
 
+  // Fetch and push wait for a running task and for open conflicts.
+  const syncLocked = busy !== null || pendingPlan !== null;
+
   return (
     <div className="bg-card border border-line rounded-2xl p-6 sm:p-8 space-y-4">
       <div>
@@ -236,7 +246,7 @@ export const RepoSyncCard = () => {
             disabled={busy !== null}
             className="flex items-center justify-center gap-1.5 rounded-lg bg-ink px-4 py-2 text-sm font-medium text-surface transition-opacity hover:opacity-90 disabled:opacity-50 sm:col-span-2"
           >
-            {busy === "connect" ? <Loader2 size={15} className="animate-spin" /> : <Link2 size={15} />}
+            {busyIcon(busy, "connect", Link2)}
             Connect and validate
           </button>
         </div>
@@ -246,7 +256,7 @@ export const RepoSyncCard = () => {
             <span className="rounded border border-line-strong px-2 py-1">
               {cfg.owner}/{cfg.repo} · {cfg.branch}
             </span>
-            <span>{hasBase ? `base: ${loadRepoState()?.fetchedAt.slice(0, 16).replace("T", " ") ?? ""}` : "no sync yet"}</span>
+            <span>{baseLabel(hasBase)}</span>
           </div>
 
           {!hasBase ? (
@@ -276,18 +286,18 @@ export const RepoSyncCard = () => {
               <div className="flex flex-wrap items-center gap-2">
                 <button
                   onClick={doFetch}
-                  disabled={busy !== null || pendingPlan !== null}
+                  disabled={syncLocked}
                   className="flex items-center gap-1.5 rounded-lg border border-line-strong px-4 py-2 text-sm font-medium text-ink transition-colors hover:border-signal hover:text-signal disabled:opacity-50"
                 >
-                  {busy === "fetch" ? <Loader2 size={15} className="animate-spin" /> : <CloudDownload size={15} />}
+                  {busyIcon(busy, "fetch", CloudDownload)}
                   Fetch latest
                 </button>
                 <button
                   onClick={doPush}
-                  disabled={busy !== null || pendingPlan !== null}
+                  disabled={syncLocked}
                   className="flex items-center gap-1.5 rounded-lg bg-ink px-4 py-2 text-sm font-medium text-surface transition-opacity hover:opacity-90 disabled:opacity-50"
                 >
-                  {busy === "push" ? <Loader2 size={15} className="animate-spin" /> : <CloudUpload size={15} />}
+                  {busyIcon(busy, "push", CloudUpload)}
                   Push changes
                 </button>
                 <input

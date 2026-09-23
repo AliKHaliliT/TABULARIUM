@@ -38,6 +38,28 @@ const TAB_TO_CONTENT_TYPE: Record<
     updates:      "updates",
   };
 
+// A list row's subtitle is the first of these fields that holds a value.
+const SUBTITLE_FIELDS = [
+  "organization",
+  "role",
+  "author",
+  "creator",
+  "provider",
+  "country",
+  "excerpt",
+  "desc",
+  "updateType",
+  "venue",
+  "event",
+  "relationship",
+  "issuer",
+];
+
+// Reads the fields as a chain of || would, so when none holds a value the
+// last field's own value comes back.
+const firstValue = (item: Record<string, unknown>, fields: string[]): unknown =>
+  fields.reduce<unknown>((found, field) => found || item[field], undefined);
+
 /** TABULARIUM's pixel mark: VITA's 3×2 mosaic read as a records hall, with a
  *  lintel laid across the top so the six cells become columns (matches
  *  favicon.svg). */
@@ -86,48 +108,28 @@ export const Admin = () => {
   } = useContent();
 
   const getItems = () => {
-    switch (activeTab) {
-      case "experience":
-        return experience;
-      case "education":
-        return education;
-      case "awards":
-        return awards;
-      case "publications":
-        return publications;
-      case "speaking":
-        return speaking;
-      case "volunteering":
-        return volunteering;
-      case "certificates":
-        return certificates;
-      case "references":
-        return references;
-      case "interests":
-        return interests;
-      case "organizations":
-        return organizations;
-      case "projects":
-        return projects;
-      case "posts":
-        return posts;
-      case "books":
-        return books;
-      case "media":
-        return media;
-      case "trips":
-        return trips;
-      case "countries":
-        return countries;
-      case "blog":
-        return blog;
-      case "updates":
-        return updates;
-      case "courses":
-        return courses;
-      default:
-        return [];
-    }
+    const itemsByTab: Partial<Record<AdminTab, AnyContentItem[]>> = {
+      experience,
+      education,
+      awards,
+      publications,
+      speaking,
+      volunteering,
+      certificates,
+      references,
+      interests,
+      organizations,
+      projects,
+      posts,
+      books,
+      media,
+      trips,
+      countries,
+      blog,
+      updates,
+      courses,
+    };
+    return itemsByTab[activeTab] ?? [];
   };
 
   const handleSaveItem = (updatedItem: AnyContentItem) => {
@@ -162,19 +164,7 @@ export const Admin = () => {
     return {
       id: source.id,
       title: (item.title || item.city || item.name || "Untitled") as string,
-      subtitle: (item.organization ||
-        item.role ||
-        item.author ||
-        item.creator ||
-        item.provider ||
-        item.country ||
-        item.excerpt ||
-        item.desc ||
-        item.updateType ||
-        item.venue ||
-        item.event ||
-        item.relationship ||
-        item.issuer) as string | undefined,
+      subtitle: firstValue(item, SUBTITLE_FIELDS) as string | undefined,
       image: (item.image || item.cover) as string | undefined,
       badge: (item.status ||
         item.postType ||
