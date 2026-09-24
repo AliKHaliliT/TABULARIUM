@@ -35,9 +35,9 @@ A slice is entered only through its `index.ts`, suites excepted. Same-layer slic
 import each other, which is the reason `publish` is one feature rather than two: the repo
 sync and the zip export both serialize the record through the same bundle, and splitting
 them would make one feature import another. The reasoning is recorded in
-[decision 0004](decisions/0004-build-the-panel-as-one-way-sliced-layers.md), and the choice
-to keep the record as a single entity slice in
-[decision 0005](decisions/0005-keep-the-record-as-one-entity-slice.md).
+[decision 0004, Build the panel as one-way sliced layers](decisions/0004-build-the-panel-as-one-way-sliced-layers.md),
+and the choice to keep the record as a single entity slice in
+[decision 0005, Keep the record as one entity slice](decisions/0005-keep-the-record-as-one-entity-slice.md).
 
 ## The shape of the app
 
@@ -59,7 +59,8 @@ tabularium/
 ├── tsconfig.node.json          # Compiler options for the build tooling (vite.config.ts)
 │
 ├── scripts/                    # Tracked repository tooling
-│   └── audit-docs.mjs          # The docs audit; the gate's Docs command
+│   ├── audit-docs.mjs          # The docs audit; the gate's Docs command
+│   └── audit-docs-selftest.mjs # Proves every rule of the audit against a planted defect
 │
 ├── docs/                       # Technical documentation (indexed in AGENTS.md)
 │
@@ -74,6 +75,7 @@ tabularium/
 │   └── content/                # The demo record this panel edits
 │
 └── tests/                      # Vitest suites mirroring the src structure
+    ├── setup.ts                # Refuses any connection that would leave the loopback
     └── src/
 ```
 
@@ -106,7 +108,7 @@ throws with the path. The localStorage override is what this panel and its prede
 wrote, so a malformed value is set aside, the committed seed is served instead, and the
 shell names the key to clear in a notice, which keeps a stale key from breaking the editor
 that has to fix it. See
-[decision 0006](decisions/0006-guard-the-record-with-hand-written-validators.md) and
+[decision 0006, Guard the record with hand-written validators](decisions/0006-guard-the-record-with-hand-written-validators.md) and
 [decision 0022, Name a refused or stale saved copy on the panel](decisions/0022-name-a-refused-or-stale-saved-copy-on-the-panel.md).
 
 ## What the panel exports
@@ -171,18 +173,27 @@ the record was last fetched.
 
 ## Testing
 
-Three rules hold however broad the suite is. Suites live in `tests/`, mirroring the source
+Five rules hold however broad the suite is. Suites live in `tests/`, mirroring the source
 tree, one suite named after the unit it covers. A collaborator is replaced only at an
 architectural seam, by a hand-written fake satisfying the contract it stands in for, never by
 mocking a module's internals, since a test bound to an implementation voids the
 substitutability the layering exists to provide. And no coverage threshold is imposed, because
 a percentage gate buys assertions that assert nothing, so breadth stays a judgment call while
-placement and substitution do not.
+placement and substitution do not. And a test is proved by the failure it catches, named
+before it is written, watched failing against a mutation after, and watched failing again when
+the fix it guards is reverted, because a test that has never failed has proved only that it
+runs. And no request leaves the loopback, `tests/setup.ts` refusing any connection to another
+host before its socket opens and a test that must reach a host naming it in the open, because
+an adapter that resolves its credentials from the environment is a working adapter on a
+machine that has them. The suite runs in a shuffled order under a seed the run prints, so a
+test that leans on its neighbour fails on the day it is written.
 
-The 6 suites here are characterization tests over the content loader, the publish exports, and the identity and palette seeds. They contain no module
-mocking at all, which is what made adopting the rule a description of existing practice rather
-than a migration. The reasoning is recorded in
-[decision 0010](decisions/0010-adopt-the-styles-test-contract.md), and the rule itself is owned by the style.
+The 8 suites here are characterization and unit tests over the content loader, the record's
+door, the publish exports, the identity and palette seeds, and the text and month libraries.
+They contain no module mocking at all, which is what made adopting the rule a description of
+existing practice rather than a migration. The reasoning is recorded in
+[decision 0010, Adopt the style's test contract](decisions/0010-adopt-the-styles-test-contract.md),
+and the rule itself is owned by the style.
 
 ## Exemplars
 
