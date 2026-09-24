@@ -161,6 +161,7 @@ export const ContentProvider = ({ children }: { children: ReactNode }) => {
         interests,
         organizations,
         settings,
+        savedCopies: ContentService.savedCopies(),
         updateContent,
         updateSettings,
         deleteItem,

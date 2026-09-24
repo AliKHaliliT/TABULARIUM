@@ -3,7 +3,7 @@
  * override this panel wrote into the browser.
  *
  * The panel reads back what it and its predecessors wrote, so the value is
- * validated on the way in. A value that breaks the contract is reported with
+ * validated on the way in. A value that breaks the contract is set aside with
  * the key to clear, and the committed seed is served instead.
  */
 
@@ -16,21 +16,48 @@ const STORAGE_PREFIX = "os_content_";
 const SETTINGS_KEY = "os_settings";
 const SEED_PREFIX = "os_content_seed_";
 
+/** A saved copy the page names, because the door refused it or because it outlived its seed. */
+export interface SavedCopyNote {
+  /** The localStorage key holding the copy, which is what the owner clears. */
+  key: string;
+  /** The collection the copy claims to be, or "settings" for the profile. */
+  type: ContentType;
+  /** Refused when it failed its check and the seed is served; stale when it still wins over markdown that changed since it was saved. */
+  kind: "refused" | "stale";
+  /** Why a refused copy failed, in the words of the check that refused it; empty for a stale one. */
+  reason: string;
+}
+
+// What the latest read or write of each key found worth naming. A key that
+// reads cleanly, is saved afresh, or holds nothing leaves the list.
+const notes = new Map<string, SavedCopyNote>();
+
 // Once a type is saved from the admin, its localStorage copy permanently
-// shadows the bundled markdown. Warn (once per type per session) when a
-// redeploy has changed the markdown underneath a shadowed type, so stale
-// content is at least diagnosable from the console.
-const warnedStale = new Set<ContentType>();
-function warnIfSeedChanged(type: ContentType) {
+// shadows the bundled markdown, so a redeploy that changed the markdown
+// underneath it is noted for the page.
+function seedChangedSince(type: ContentType): boolean {
   const saved = localStorage.getItem(`${SEED_PREFIX}${type}`);
-  if (!saved || warnedStale.has(type)) return;
-  if (saved !== seedFingerprint(type)) {
-    warnedStale.add(type);
-    console.warn(
-      `[personal-os] Bundled markdown for "${type}" changed since it was last ` +
-        "edited in the admin; the localStorage copy still wins. Clear " +
-        `"${STORAGE_PREFIX}${type}" to re-seed from markdown.`
-    );
+  return Boolean(saved) && saved !== seedFingerprint(type);
+}
+
+// The copy saved under a key, or null when none is saved or storage cannot be
+// read at all. An unreadable store holds nothing to honor or to name.
+function savedCopy(key: string): string | null {
+  try {
+    return localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+// Parses and checks a saved copy. A copy that fails is noted under its key,
+// so the page can name what to clear, and the caller falls back to the seed.
+function honor<T>(key: string, type: ContentType, stored: string, check: (value: unknown) => T): T | null {
+  try {
+    return check(JSON.parse(stored));
+  } catch (e) {
+    notes.set(key, { key, type, kind: "refused", reason: e instanceof Error ? e.message : String(e) });
+    return null;
   }
 }
 
@@ -50,40 +77,43 @@ export const ContentService = {
    * @param type - The collection to read.
    *
    * @returns The stored items when an override exists and satisfies the
-   *   contract, otherwise the committed seed. A broken override is reported with
-   *   the key to clear and does not reach the caller.
+   *   contract, otherwise the committed seed. A broken override is noted for
+   *   `savedCopies` and does not reach the caller, and one that outlived a
+   *   changed seed is served and noted as stale.
    */
   getAll: (type: ContentType): AnyContentItem[] => {
-    try {
-      const key = `${STORAGE_PREFIX}${type}`;
-      const stored = localStorage.getItem(key);
-      if (stored) {
-        warnIfSeedChanged(type);
-        return validateItems(JSON.parse(stored), type, `localStorage "${key}"`);
-      }
-    } catch (e) {
-      console.error(`Failed to load ${type}`, e);
-    }
-    return loadInitialData(type);
+    const key = `${STORAGE_PREFIX}${type}`;
+    const stored = savedCopy(key);
+    notes.delete(key);
+    if (!stored) return loadInitialData(type);
+    const items = honor(key, type, stored, (value) => validateItems(value, type, `localStorage "${key}"`));
+    if (items === null) return loadInitialData(type);
+    if (seedChangedSince(type)) notes.set(key, { key, type, kind: "stale", reason: "" });
+    return items;
   },
 
   /**
    * Reads the owner profile, preferring this browser's override.
    *
    * @returns The stored profile when it satisfies the contract, otherwise the
-   *   committed seed.
+   *   committed seed; a broken one is noted for `savedCopies`.
    */
   getSettings: (): UserSettings => {
-    try {
-      const stored = localStorage.getItem(SETTINGS_KEY);
-      if (stored) {
-        return validateSettings(JSON.parse(stored), `localStorage "${SETTINGS_KEY}"`);
-      }
-    } catch (e) {
-      console.error("Failed to load settings", e);
-    }
-    return loadSettings();
+    const stored = savedCopy(SETTINGS_KEY);
+    notes.delete(SETTINGS_KEY);
+    const settings = stored
+      ? honor(SETTINGS_KEY, "settings", stored, (value) => validateSettings(value, `localStorage "${SETTINGS_KEY}"`))
+      : null;
+    return settings ?? loadSettings();
   },
+
+  /**
+   * Names every saved copy the latest reads set aside or found stale, so the
+   * page can say which key to clear.
+   *
+   * @returns One note per key, empty when every override was honored and current.
+   */
+  savedCopies: (): SavedCopyNote[] => [...notes.values()],
 
   /**
    * Writes one collection, recording the seed fingerprint alongside it.
@@ -99,6 +129,7 @@ export const ContentService = {
   save: (type: ContentType, data: AnyContentItem[]) => {
     safeSetItem(`${STORAGE_PREFIX}${type}`, JSON.stringify(data));
     safeSetItem(`${SEED_PREFIX}${type}`, seedFingerprint(type));
+    notes.delete(`${STORAGE_PREFIX}${type}`);
   },
 
   /**
@@ -110,6 +141,7 @@ export const ContentService = {
    */
   saveSettings: (data: UserSettings) => {
     safeSetItem(SETTINGS_KEY, JSON.stringify(data));
+    notes.delete(SETTINGS_KEY);
   },
 
   /**

@@ -45,6 +45,8 @@ One page. `src/app/App.tsx` composes the providers and the chrome around
 `src/pages/admin/AdminPage.tsx`, which is the whole product: a grouped tab bar (System,
 Career, Writing, Life), per-type content tables with create, edit, and delete, and the
 special-cased Site, Profile, Skills, and Appearance tabs. There is no router and no server.
+The chrome is the theme switch and, in a browser holding a saved copy the door refused or
+found stale, a small notice at the foot of the viewport naming each key to clear.
 
 ```text
 tabularium/
@@ -81,15 +83,16 @@ tabularium/
 src/content/**/*.md (demo seed)
   -> entities/record/seed.ts     import.meta.glob at build time; parses and checks frontmatter
   -> entities/record/store.ts    checks localStorage first, falls back to the parsed files
-  -> entities/record/context.ts  React context; typed collections + writers
+  -> entities/record/context.ts  React context; typed collections, saved-copy notes, and writers
   -> the admin tabs              consume via useContent()
 ```
 
 Edits are stored in localStorage under `os_content_<type>` and `os_settings` and shadow
 the seed; clearing browser storage resets everything, which is intentional. Saves record a
-fingerprint of the bundled seed so a rebuild that changes shadowed markdown logs a console
-warning naming the key to clear. All writes go through `safeSetItem`
-(`src/shared/lib/storage.ts`).
+fingerprint of the bundled seed, so a rebuild that changes shadowed markdown is caught on the
+next read, and the shell names the key to clear in a notice while the saved copy still wins.
+All writes go through `safeSetItem` (`src/shared/lib/storage.ts`), where a refused write
+raises a one-time alert.
 
 ## The record boundary
 
@@ -100,9 +103,11 @@ becomes a `RecordContractError` naming the file or the storage key.
 The two doors fail differently on purpose. Bundled markdown is committed content, so a
 file whose frontmatter cannot produce a valid item is an authoring bug and the loader
 throws with the path. The localStorage override is what this panel and its predecessors
-wrote, so a malformed value reports the key to clear and the committed seed is served
-instead, which keeps a stale key from breaking the editor that has to fix it. See
-[decision 0006](decisions/0006-guard-the-record-with-hand-written-validators.md).
+wrote, so a malformed value is set aside, the committed seed is served instead, and the
+shell names the key to clear in a notice, which keeps a stale key from breaking the editor
+that has to fix it. See
+[decision 0006](decisions/0006-guard-the-record-with-hand-written-validators.md) and
+[decision 0022, Name a refused or stale saved copy on the panel](decisions/0022-name-a-refused-or-stale-saved-copy-on-the-panel.md).
 
 ## What the panel exports
 

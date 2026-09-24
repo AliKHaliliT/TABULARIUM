@@ -31,8 +31,9 @@ import {
   Interest,
   Organization,
 } from "./model";
+import type { SavedCopyNote } from "./store";
 
-/** Every collection of the record, plus the writes an editing surface makes. */
+/** Every collection of the record, the saved copies worth naming, and the writes an editing surface makes. */
 export interface ContentContextValue {
   projects: Project[];
   posts: Post[];
@@ -54,6 +55,8 @@ export interface ContentContextValue {
   interests: Interest[];
   organizations: Organization[];
   settings: UserSettings;
+  /** Saved copies in this browser the door refused or found stale, empty when every one is current. */
+  savedCopies: SavedCopyNote[];
   updateContent: (type: ContentType, items: AnyContentItem[]) => void;
   updateSettings: (settings: UserSettings) => void;
   deleteItem: (type: ContentType, id: string | number) => void;

@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { ThemeToggle } from "./ThemeToggle";
+import { SavedCopyNotice } from "./SavedCopyNotice";
 
 /**
  * Draws the shell around the panel's content.
@@ -18,5 +19,6 @@ export const AppLayout = ({ children }: { children: ReactNode }) => (
     <main className="mx-auto min-h-screen max-w-[1180px] border-line px-5 pb-10 pt-8 md:border-x md:border-dashed">
       {children}
     </main>
+    <SavedCopyNotice />
   </div>
 );
