@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { formatDateForInput, useScrollLock } from "@/shared/lib";
 import { AnyContentItem } from "@/entities/record";
 import { AdminTab } from "./tabs";
-import { EditDraft, str } from "./editDraft";
+import { EditDraft, str, storedKinds, strList } from "./editDraft";
 import { Field } from "./editFields";
 import { TypeFields } from "./editForms";
 
@@ -121,6 +121,7 @@ export const EditModal = ({
     const normalized = {
       ...formData,
       pin: normalizePin(formData.pin),
+      ...(type === "experience" ? { employmentType: storedKinds(strList(formData, "employmentType")) } : {}),
     };
     onSave(normalized as unknown as AnyContentItem);
     onClose();

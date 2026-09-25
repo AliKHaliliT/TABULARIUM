@@ -14,6 +14,17 @@ export interface EditDraft {
 export const str = (draft: EditDraft, field: string): string =>
   (draft[field] as string | undefined) || "";
 
+/** Read a draft field that may hold one word or a list of them, as a list. */
+export const strList = (draft: EditDraft, field: string): string[] => {
+  const value = draft[field];
+  if (Array.isArray(value)) return value.filter((v): v is string => typeof v === "string");
+  return typeof value === "string" && value ? [value] : [];
+};
+
+/** A role's chosen kinds the way the record stores them: none drops the field, one is a word, several a list. */
+export const storedKinds = (kinds: string[]): string | string[] | undefined =>
+  kinds.length === 0 ? undefined : kinds.length === 1 ? kinds[0] : kinds;
+
 /** How a form reports one field change back to the draft it is editing. */
 export type SetField = (field: string, value: string | string[] | boolean) => void;
 

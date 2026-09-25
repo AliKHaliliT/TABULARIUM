@@ -1,5 +1,5 @@
 // Typed field primitives for the admin EditModal. Every content-type form is
-// composed from these six shapes; the styling matches the original inline
+// composed from these seven shapes; the styling matches the original inline
 // markup exactly.
 
 import { ReactNode } from "react";
@@ -94,6 +94,41 @@ export const SelectField = ({
         )
       )}
     </select>
+  </div>
+);
+
+/** A labelled row of toggles over a fixed set of values, any number of them on.
+ *  The chosen values come back in the options' order, whatever order they were clicked. */
+export const ChoiceField = ({
+  label,
+  values,
+  onChange,
+  options,
+}: {
+  label: string;
+  values: string[];
+  onChange: (values: string[]) => void;
+  options: Array<{ value: string; label: string }>;
+}) => (
+  <div className="space-y-2">
+    <span className={LABEL_CLS}>{label}</span>
+    <div className="flex flex-wrap gap-2" role="group" aria-label={label}>
+      {options.map((o) => {
+        const on = values.includes(o.value);
+        const next = on ? values.filter((v) => v !== o.value) : [...values, o.value];
+        return (
+          <button
+            key={o.value}
+            type="button"
+            aria-pressed={on}
+            onClick={() => onChange(options.map((x) => x.value).filter((v) => next.includes(v)))}
+            className={`rounded-full border px-3 py-1 text-sm transition-colors ${on ? "border-signal text-signal" : "border-line text-muted hover:text-ink"}`}
+          >
+            {o.label}
+          </button>
+        );
+      })}
+    </div>
   </div>
 );
 

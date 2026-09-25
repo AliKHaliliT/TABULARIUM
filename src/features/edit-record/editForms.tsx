@@ -4,7 +4,7 @@
 
 import type { ComponentType } from "react";
 import { AdminTab } from "./tabs";
-import { EditDraft, SetField, str } from "./editDraft";
+import { EditDraft, SetField, str, strList } from "./editDraft";
 import {
   AWARD_TYPE_LABEL,
   EMPLOYMENT_TYPE_LABEL,
@@ -12,6 +12,7 @@ import {
   SPEAKING_TYPE_LABEL,
 } from "@/entities/record";
 import {
+  ChoiceField,
   Field,
   RichBodyField,
   Row,
@@ -37,10 +38,10 @@ const ExperienceFields = ({ draft, set }: FormProps) => (
       <Field label="Company *" value={str(draft, "company")} onChange={(v) => set("company", v)} />
     </Row>
     <Row>
-      <SelectField
-        label="Employment Type"
-        value={str(draft, "employmentType") || "full-time"}
-        onChange={(v) => set("employmentType", v)}
+      <ChoiceField
+        label="Employment Type (any that apply)"
+        values={strList(draft, "employmentType")}
+        onChange={(kinds) => set("employmentType", kinds)}
         options={optionsFrom(EMPLOYMENT_TYPE_LABEL)}
       />
       <Field label="Location" value={str(draft, "location")} onChange={(v) => set("location", v)} placeholder="City, Province" />
