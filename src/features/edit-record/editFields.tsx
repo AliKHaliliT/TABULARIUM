@@ -16,7 +16,7 @@ export const Row = ({ children }: { children: ReactNode }) => (
   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">{children}</div>
 );
 
-/** A labelled single-line input, or the month chooser where the type asks for one. */
+/** A labeled single-line input, or the month chooser where the type asks for one. */
 export const Field = ({
   label,
   value,
@@ -64,7 +64,7 @@ export const Field = ({
   </div>
 );
 
-/** A labelled dropdown over a fixed set of values. */
+/** A labeled dropdown over a fixed set of values. */
 export const SelectField = ({
   label,
   value,
@@ -97,7 +97,7 @@ export const SelectField = ({
   </div>
 );
 
-/** A labelled row of toggles over a fixed set of values, any number of them on.
+/** A labeled row of toggles over a fixed set of values, any number of them on.
  *  The chosen values come back in the options' order, whatever order they were clicked. */
 export const ChoiceField = ({
   label,
@@ -174,7 +174,7 @@ export const SuggestField = ({
   );
 };
 
-/** A labelled multi-line input for plain text. */
+/** A labeled multi-line input for plain text. */
 export const TextAreaField = ({
   label,
   value,
@@ -197,7 +197,7 @@ export const TextAreaField = ({
   </div>
 );
 
-/** A labelled chip field for an item's tags. */
+/** A labeled chip field for an item's tags. */
 export const TagsField = ({
   tags,
   onChange,
